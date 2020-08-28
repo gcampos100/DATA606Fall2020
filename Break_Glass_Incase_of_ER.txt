@@ -1,0 +1,19 @@
+install.packages(c('ps'))
+install.packages('backports', type = 'source')
+
+
+install.packages('tinytex')
+tinytex::install_tinytex()
+
+devtools::install_github('jbryer/DATA606')
+
+
+library('DATA606')
+vignette(package='DATA606')
+vignette('os4')
+data(package='DATA606')
+getLabs() 
+viewLab('Lab1')
+startLab('Lab1') 
+shiny_demo()
+
