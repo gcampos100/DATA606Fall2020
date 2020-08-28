@@ -5,11 +5,11 @@ output:
     pdf_document:
         extra_dependencies: ["geometry", "multicol", "multirow"]
 ---
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(openintro)
 ```
-
 **Smoking habits of UK residents**. (1.10, p. 20) A survey was conducted to study the smoking habits of UK residents. Below is a data matrix displaying a portion of the data collected in this survey. Note that "$\pounds$" stands for British Pounds Sterling, "cig" stands for cigarettes, and "N/A" refers to a missing component of the data.
 
 \begin{center}
@@ -30,6 +30,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 (a) What does each row of the data matrix represent?
+**Answer:** the represent a participant in the study.
+```{r view_smoking}
+glimpse(smoking)
+```
+
 (b) How many participants were included in the survey?
 (c) Indicate whether each variable in the study is numerical or categorical. If numerical, identify as continuous or discrete. If categorical, indicate if the variable is ordinal.
 
