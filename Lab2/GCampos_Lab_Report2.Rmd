@@ -42,8 +42,8 @@ ggplot(data = nycflights, aes(x = dep_delay)) +
 
 \newline
 ### __Exercise 1 Answer:__
-**i)** binwidth = 15 shows departure delays before the peak amount\newline\
-**ii)** binwidth = 150 shows a larger count for number of delay flights. Approximately 100 more.
+**i)** binwidth = 15 shows departure delays before the peak amount and is symmetrical\newline\
+**ii)** binwidth = 150 shows a larger count for number of delay flights. Approximately 100 more and is left skewed.
 
 ### Exercise 2
 2.  Create a new data frame that includes flights headed to SFO in February, 
@@ -121,7 +121,7 @@ nycflights %>%
 
 ### __Exercise 5 Answer:__
 
-Mean is the optimal choice. An average gives a calculated value of a the potential delay for the month. The median is uncalculated and more easily impacted by outliers in the data set for the month (e.g. 1/2013 saw at least one triple digit delay).
+Mean is the optimal choice. An average gives a calculated value of a the potential delay for the month. The median is uncalculated, robust and less sensitive to outliers in the data set for the month (e.g. 1/2013 saw at least one triple digit delay) hence is not the best choice.
 
 **On time departure rate for NYC airports**
 
@@ -226,8 +226,25 @@ ex9_data<-nycflights%>%
 
 then create the scatter plot with color configuration using dep_delay and arr_delay based on graph provided.
 ```{r sctr_ggplot-ex9_data}
-ggplot(data  = ex9_data, mapping = aes(x = dep_delay, arr_delay, color = carrier))+ geom_point()
+ggplot(data  = ex9_data, mapping = aes(x = dep_delay, y = arr_delay, color = carrier))+ geom_point()
 ```
+```{r sctr_gg_box_plot-ex9_data}
+ggplot(data = ex9_data, aes(group = 1, x = dep_delay, y = arr_delay, color = carrier))+ geom_point() + ylim(-100,0) +xlim(-100, 65)
+```
+
+```{r calc-max_y_where_x_zero}
+ex9_data%>%
+	summarise(max_dep = max(dep_delay[arr_delay==0]))
+```
+### __Exercise 9 Answers Part II__
+\newline
+
+Assessing the latest a person can depart and still arrive on time can be viewed as largest departure delay value where the arrival delay value equals 0. Therefore I set the app_delay limit value between -100 to 0. From there I decreased the x-limit value down to 65 (as decreasing any more would make my largest plot point disappear).\newline
+\newline
+\newline
+To check my result I also searched the largest departure delay where arrival delay equals 0 using the max function.\newline
+\newline \newline
+I found that (roughly) the cutoff point for departure is between **40-65** minutes.
 
 ...
 

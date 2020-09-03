@@ -38,15 +38,15 @@ glimpse(smoking)
 (b) How many participants were included in the survey?\newline \ **ANSWER:** 1,693
 (c) Indicate whether each variable in the study is numerical or categorical. If numerical, identify as continuous or discrete. If categorical, indicate if the variable is ordinal.\newline
 **ANSWER:**\newline
-**Sex:** 							Categorical, Nominal\newline
+**Sex:** 							Categorical, Not Ordinal\newline
 **Age:** 							Numerical, Continuous\newline
-**'Marital Status':** 				Categorical, Nominal\newline
+**'Marital Status':** 				Categorical, Not Ordinal\newline
 **`Highest Qualification`:**		Categorical, Ordinal\newline
-**Nationality:**					Categorical, Nominal\newline
-**Ethnicity:**						Categorical, Nominal\newline
+**Nationality:**					Categorical, Not Ordinal\newline
+**Ethnicity:**						Categorical, Not Ordinal\newline
 **`Gross Income`:**					Numerical, Continuous\newline
-**Region:**							Categorical, Nominal\newline
-**`Smoke?`:**						Categorical, Nominal\newline
+**Region:**							Categorical, Not Ordinal\newline
+**`Smoke?`:**						Categorical, Not Ordinal\newline
 **`Amount Weekends`:**				Numerical, Discrete\newline
 **`Amount Weekdays`:**				Numerical, Discrete\newline
 **Type:**							Categorical, Ordinal\newline

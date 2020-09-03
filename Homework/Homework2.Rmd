@@ -1,6 +1,6 @@
 ---
 title: "Chapter 2 - Summarizing Data"
-author: ""
+author: "Gabriel Campos"
 output:
     pdf_document:
         extra_dependencies: ["geometry", "multicol", "multirow"]
@@ -32,6 +32,16 @@ scores <- c(57, 66, 69, 71, 72, 73, 74, 77, 78, 78, 79, 79, 81, 81, 82, 83, 83, 
 
 ```
 
+## Question 1 Answer:
+
+```{r boxplot-scores-graphics}
+#boxplot(scores)
+```
+
+```{r boxplot-scores-openintro}
+#boxPlot(scores)
+
+```
 
 
 
@@ -88,9 +98,12 @@ executives earn much higher salaries than the all other employees.
 
 **Heart transplants.** (2.26, p. 76) The Stanford University Heart Transplant Study was conducted to determine whether an  experimental heart transplant program increased lifespan. Each patient entering the program was designated an official heart transplant candidate, meaning that he was gravely ill and would most likely benefit from a new heart. Some patients got a transplant and some did not. The variable *transplant* indicates which group the patients were in; patients in the treatment group got a transplant and those in the control group did not. Of the 34 patients in the control group, 30 died. Of the 69 people in the treatment group, 45 died. Another variable called *survived* was used to indicate whether or not the patient was alive at the end of the study.
 
+
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.show="hold", out.width="50%", fig.height=3}
 library(openintro)
-data(heartTr)
+library(tidyverse)
+#data("heartTr")
+heartTr <- read.delim("D:/Git/DATA606Fall2020/course_data/os3_data/heartTr.txt")
 # mosaic plot -------------------------------------------------------
 par(mar = c(0, 0, 0, 0), las = 1, mgp = c(2.7, 0.9, 0))
 mosaicplot(transplant ~ survived, data = heartTr, 
