@@ -1,6 +1,6 @@
 ---
 title: "Introduction to R and RStudio"
-author: ""
+author: "Gabriel Campos"
 output:
   pdf_document: default
   html_document:

@@ -1,3 +1,5 @@
+writeLines('PATH="${RTOOLS40_HOME}\\usr\\bin;${PATH}"', con = "~/.Renviron")
+
 install.packages(c('ps'))
 install.packages('backports', type = 'source')
 
@@ -13,7 +15,7 @@ vignette(package='DATA606')
 vignette('os4')
 data(package='DATA606')
 getLabs() 
-viewLab('Lab1')
-startLab('Lab1') 
+viewLab('Lab2')
+startLab('Lab2') 
 shiny_demo()
 
