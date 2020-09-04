@@ -1,0 +1,634 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Lab2: Intro to Data},
+  pdfauthor={Gabriel Campos},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{geometry}
+\usepackage{multicol}
+\usepackage{multirow}
+
+\title{Lab2: Intro to Data}
+\author{Gabriel Campos}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\KeywordTok{library}\NormalTok{(openintro)}
+\KeywordTok{data}\NormalTok{(}\StringTok{"nycflights"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\href{https://www.youtube.com/watch?v=Pdc368lS2hk}{\textbf{Basic R
+Markdown with an OpenIntro Lab}}
+
+\hypertarget{lab-report}{%
+\subsubsection{Lab report}\label{lab-report}}
+
+To record your analysis in a reproducible format, you can adapt the
+general Lab Report template from the \textbf{openintro} package. Watch
+the video above to learn how.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{names}\NormalTok{(nycflights)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "year"      "month"     "day"       "dep_time"  "dep_delay" "arr_time" 
+##  [7] "arr_delay" "carrier"   "tailnum"   "flight"    "origin"    "dest"     
+## [13] "air_time"  "distance"  "hour"      "minute"
+\end{verbatim}
+
+\hypertarget{exercise-1}{%
+\subsubsection{Exercise 1}\label{exercise-1}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Look carefully at these three histograms. How do they compare? Are
+  features revealed in one that are obscured in another?
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data=}\NormalTok{nycflights, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ dep_delay)) }\OperatorTok{+}
+\StringTok{    }\KeywordTok{geom_histogram}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+\end{verbatim}
+
+\includegraphics{GCampos_Lab_Report2-Error_files/figure-latex/plot-hist-nycflights-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ nycflights, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ dep_delay))}\OperatorTok{+}
+\StringTok{    }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{binwidth =} \DecValTok{15}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{GCampos_Lab_Report2-Error_files/figure-latex/hist-dep-delay-bin-15-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ nycflights, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ dep_delay)) }\OperatorTok{+}
+\StringTok{    }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{binwidth =} \DecValTok{150}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{GCampos_Lab_Report2-Error_files/figure-latex/hist-dep_delay-bin-150-1.pdf}
+
+\hypertarget{exercise-1-answer}{%
+\subsubsection{\texorpdfstring{\textbf{Exercise 1
+Answer:}}{Exercise 1 Answer:}}\label{exercise-1-answer}}
+
+\textbf{i)} binwidth = 15 shows departure delays before the peak amount
+and is symmetrical\newline\\
+\textbf{ii)} binwidth = 150 shows a larger count for number of delay
+flights. Approximately 100 more and is left skewed.
+
+\hypertarget{exercise-2}{%
+\subsubsection{Exercise 2}\label{exercise-2}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Create a new data frame that includes flights headed to SFO in
+  February, and save this data frame as \texttt{sfo\_feb\_flights}. How
+  many flights meet these criteria?
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sfo_feb_flights <-}\StringTok{ }\NormalTok{nycflights }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{filter}\NormalTok{(dest }\OperatorTok{==}\StringTok{ "SFO"}\NormalTok{, month }\OperatorTok{==}\StringTok{ }\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{glimpse}\NormalTok{(sfo_feb_flights)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 68
+## Columns: 16
+## $ year      <int> 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 201...
+## $ month     <int> 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, ...
+## $ day       <int> 18, 3, 15, 18, 24, 25, 7, 15, 13, 8, 11, 13, 25, 20, 12, ...
+## $ dep_time  <int> 1527, 613, 955, 1928, 1340, 1415, 1032, 1805, 1056, 656, ...
+## $ dep_delay <dbl> 57, 14, -5, 15, 2, -10, 1, 20, -4, -4, 40, -2, -1, -6, -7...
+## $ arr_time  <int> 1903, 1008, 1313, 2239, 1644, 1737, 1352, 2122, 1412, 103...
+## $ arr_delay <dbl> 48, 38, -28, -6, -21, -13, -10, 2, -13, -6, 2, -5, -30, -...
+## $ carrier   <chr> "DL", "UA", "DL", "UA", "UA", "UA", "B6", "AA", "UA", "DL...
+## $ tailnum   <chr> "N711ZX", "N502UA", "N717TW", "N24212", "N76269", "N532UA...
+## $ flight    <int> 1322, 691, 1765, 1214, 1111, 394, 641, 177, 642, 1865, 27...
+## $ origin    <chr> "JFK", "JFK", "JFK", "EWR", "EWR", "JFK", "JFK", "JFK", "...
+## $ dest      <chr> "SFO", "SFO", "SFO", "SFO", "SFO", "SFO", "SFO", "SFO", "...
+## $ air_time  <dbl> 358, 367, 338, 353, 341, 355, 359, 338, 347, 361, 332, 35...
+## $ distance  <dbl> 2586, 2586, 2586, 2565, 2565, 2586, 2586, 2586, 2586, 258...
+## $ hour      <dbl> 15, 6, 9, 19, 13, 14, 10, 18, 10, 6, 19, 8, 10, 18, 7, 17...
+## $ minute    <dbl> 27, 13, 55, 28, 40, 15, 32, 5, 56, 56, 10, 33, 48, 49, 23...
+\end{verbatim}
+
+\hypertarget{exercise-2-answer}{%
+\subsubsection{\texorpdfstring{\textbf{Exercise 2
+Answer:}}{Exercise 2 Answer:}}\label{exercise-2-answer}}
+
+68 flights meet these criteria.\newline
+
+\hypertarget{exercise-3}{%
+\subsubsection{Exercise 3}\label{exercise-3}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Describe the distribution of the \textbf{arrival} delays of these
+  flights using a histogram and appropriate summary statistics.
+  \textbf{Hint:} The summary statistics you use should depend on the
+  shape of the distribution.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ sfo_feb_flights, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ arr_delay))}\OperatorTok{+}
+\StringTok{    }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{binwidth =} \DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{GCampos_Lab_Report2-Error_files/figure-latex/ggplot-hist-sfo_feb_arr_delay-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{### Alternative method based off of https://www.statmethods.net/graphs/density.html}
+\KeywordTok{hist}\NormalTok{(sfo_feb_flights}\OperatorTok{$}\NormalTok{arr_delay)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{GCampos_Lab_Report2-Error_files/figure-latex/hist-plot-sfo_feb_arr_delay-1.pdf}
+
+\emph{Note: Histogram is symmetric and unimodal with one potential
+outlier.}\newline \newline
+
+\hypertarget{exercise-3-answer}{%
+\subsubsection{\texorpdfstring{\textbf{Exercise 3
+Answer:}}{Exercise 3 Answer:}}\label{exercise-3-answer}}
+
+For the bell curve created by the histogram, the appropriate summary
+statistics are the numerical stats mean, media, interquartile range,
+standard deviation and number of values ``n''.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sfo_feb_flights }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{mean_ad   =} \KeywordTok{mean}\NormalTok{(arr_delay), }
+            \DataTypeTok{median_ad =} \KeywordTok{median}\NormalTok{(arr_delay),}
+            \DataTypeTok{iqr_ad =} \KeywordTok{IQR}\NormalTok{(arr_delay),}
+            \DataTypeTok{sd_ad =} \KeywordTok{sd}\NormalTok{(arr_delay),}
+            \DataTypeTok{n_ad =} \KeywordTok{n}\NormalTok{())}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 1 x 5
+##   mean_ad median_ad iqr_ad sd_ad  n_ad
+##     <dbl>     <dbl>  <dbl> <dbl> <int>
+## 1    -4.5       -11   23.2  36.3    68
+\end{verbatim}
+
+\hypertarget{exercise-4}{%
+\subsubsection{Exercise 4}\label{exercise-4}}
+
+Calculate the median and interquartile range for \texttt{arr\_delay}s of
+flights in the \texttt{sfo\_feb\_flights} data frame, grouped by
+carrier. Which carrier has the most variable arrival delays?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sfo_feb_flights }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{group_by}\NormalTok{(carrier) }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{median_ad =} \KeywordTok{median}\NormalTok{(arr_delay), }\DataTypeTok{iqr_ad =} \KeywordTok{IQR}\NormalTok{(arr_delay))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `summarise()` ungrouping output (override with `.groups` argument)
+\end{verbatim}
+
+\begin{verbatim}
+## # A tibble: 5 x 3
+##   carrier median_ad iqr_ad
+##   <chr>       <dbl>  <dbl>
+## 1 AA            5     17.5
+## 2 B6          -10.5   12.2
+## 3 DL          -15     22  
+## 4 UA          -10     22  
+## 5 VX          -22.5   21.2
+\end{verbatim}
+
+\hypertarget{exercise-4-answer}{%
+\subsubsection{\texorpdfstring{\textbf{Exercise 4
+Answer:}}{Exercise 4 Answer:}}\label{exercise-4-answer}}
+
+United Airlines Inc.~(UA) and Delta Airlines Inc.~(DL) have the highest
+interquartile range. IQR is a measure of variability. Hence the answer
+is UA and DL
+
+\hypertarget{exercise-5}{%
+\subsubsection{Exercise 5}\label{exercise-5}}
+
+Suppose you really dislike departure delays and you want to schedule
+your travel in a month that minimizes your potential departure delay
+leaving NYC. One option is to choose the month with the lowest mean
+departure delay. Another option is to choose the month with the lowest
+median departure delay. What are the pros and cons of these two choices?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{nycflights }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{group_by}\NormalTok{(month) }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{mean_dd =} \KeywordTok{mean}\NormalTok{(dep_delay), }\KeywordTok{median}\NormalTok{(dep_delay))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `summarise()` ungrouping output (override with `.groups` argument)
+\end{verbatim}
+
+\begin{verbatim}
+## # A tibble: 12 x 3
+##    month mean_dd `median(dep_delay)`
+##    <int>   <dbl>               <dbl>
+##  1     1   10.2                   -2
+##  2     2   10.7                   -2
+##  3     3   13.5                   -1
+##  4     4   14.6                   -2
+##  5     5   13.3                   -1
+##  6     6   20.4                    0
+##  7     7   20.8                    0
+##  8     8   12.6                   -1
+##  9     9    6.87                  -3
+## 10    10    5.88                  -3
+## 11    11    6.10                  -2
+## 12    12   17.4                    1
+\end{verbatim}
+
+\hypertarget{exercise-5-answer}{%
+\subsubsection{\texorpdfstring{\textbf{Exercise 5
+Answer:}}{Exercise 5 Answer:}}\label{exercise-5-answer}}
+
+Mean is the optimal choice. An average gives a calculated value of a the
+potential delay for the month. The median is uncalculated, robust and
+less sensitive to outliers in the data set for the month (e.g.~1/2013
+saw at least one triple digit delay) hence is not the best choice.
+
+\textbf{On time departure rate for NYC airports}
+
+Suppose you will be flying out of NYC and want to know which of the
+three major NYC airports has the best on time departure rate of
+departing flights. Also supposed that for you, a flight that is delayed
+for less than 5 minutes is basically ``on time.''" You consider any
+flight delayed for 5 minutes of more to be ``delayed''.
+
+In order to determine which airport has the best on time departure rate,
+you can
+
+\begin{itemize}
+\tightlist
+\item
+  first classify each flight as ``on time'' or ``delayed'',
+\item
+  then group flights by origin airport,
+\item
+  then calculate on time departure rates for each origin airport,
+\item
+  and finally arrange the airports in descending order for on time
+  departure percentage.
+\end{itemize}
+
+Let's start with classifying each flight as ``on time'' or ``delayed''
+by creating a new variable with the \texttt{mutate} function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{nycflights <-}\StringTok{ }\NormalTok{nycflights }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{dep_type =} \KeywordTok{ifelse}\NormalTok{(dep_delay }\OperatorTok{<}\StringTok{ }\DecValTok{5}\NormalTok{, }\StringTok{"on time"}\NormalTok{, }\StringTok{"delayed"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+The first argument in the \texttt{mutate} function is the name of the
+new variable we want to create, in this case \texttt{dep\_type}. Then if
+\texttt{dep\_delay\ \textless{}\ 5}, we classify the flight as
+\texttt{"on\ time"} and \texttt{"delayed"} if not, i.e.~if the flight is
+delayed for 5 or more minutes.
+
+Note that we are also overwriting the \texttt{nycflights} data frame
+with the new version of this data frame that includes the new
+\texttt{dep\_type} variable.
+
+We can handle all of the remaining steps in one code chunk:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{nycflights }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(origin) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{ot_dep_rate =} \KeywordTok{sum}\NormalTok{(dep_type }\OperatorTok{==}\StringTok{ "on time"}\NormalTok{) }\OperatorTok{/}\StringTok{ }\KeywordTok{n}\NormalTok{()) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(ot_dep_rate))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `summarise()` ungrouping output (override with `.groups` argument)
+\end{verbatim}
+
+\begin{verbatim}
+## # A tibble: 3 x 2
+##   origin ot_dep_rate
+##   <chr>        <dbl>
+## 1 LGA          0.728
+## 2 JFK          0.694
+## 3 EWR          0.637
+\end{verbatim}
+
+\hypertarget{exercise-6}{%
+\subsubsection{Exercise 6}\label{exercise-6}}
+
+If you were selecting an airport simply based on on time departure
+percentage, which NYC airport would you choose to fly out of?
+
+\hypertarget{exercise-6-answer}{%
+\subsubsection{\texorpdfstring{\textbf{Exercise 6
+Answer:}}{Exercise 6 Answer:}}\label{exercise-6-answer}}
+
+I would chose LGA or LaGuardia which has a 72.3\% on time arrival
+percentage
+
+\hypertarget{exercise-7}{%
+\subsubsection{Exercise 7}\label{exercise-7}}
+
+Mutate the data frame so that it includes a new variable that contains
+the average speed, \texttt{avg\_speed} traveled by the plane for each
+flight (in mph). \textbf{Hint:} Average speed can be calculated as
+distance divided by number of hours of travel, and note that
+\texttt{air\_time} is given in minutes.
+
+\hypertarget{exercise-7-answer}{%
+\subsubsection{\texorpdfstring{\textbf{Exercise 7
+Answer:}}{Exercise 7 Answer:}}\label{exercise-7-answer}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# This chunk was in order to view code before storing on table}
+\CommentTok{#nycflights%>%}
+\CommentTok{#   mutate(avg_speed = (distance/(air_time/60)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{nycflights<-}\StringTok{ }\NormalTok{nycflights}\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{avg_speed =}\NormalTok{ (distance}\OperatorTok{/}\NormalTok{(air_time}\OperatorTok{/}\DecValTok{60}\NormalTok{)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# to verify storage}
+\KeywordTok{glimpse}\NormalTok{(nycflights)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 32,735
+## Columns: 18
+## $ year      <int> 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 201...
+## $ month     <int> 6, 5, 12, 5, 7, 1, 12, 8, 9, 4, 6, 11, 4, 3, 10, 1, 2, 8,...
+## $ day       <int> 30, 7, 8, 14, 21, 1, 9, 13, 26, 30, 17, 22, 26, 25, 21, 2...
+## $ dep_time  <int> 940, 1657, 859, 1841, 1102, 1817, 1259, 1920, 725, 1323, ...
+## $ dep_delay <dbl> 15, -3, -1, -4, -3, -3, 14, 85, -10, 62, 5, 5, -2, 115, -...
+## $ arr_time  <int> 1216, 2104, 1238, 2122, 1230, 2008, 1617, 2032, 1027, 154...
+## $ arr_delay <dbl> -4, 10, 11, -34, -8, 3, 22, 71, -8, 60, -4, -2, 22, 91, -...
+## $ carrier   <chr> "VX", "DL", "DL", "DL", "9E", "AA", "WN", "B6", "AA", "EV...
+## $ tailnum   <chr> "N626VA", "N3760C", "N712TW", "N914DL", "N823AY", "N3AXAA...
+## $ flight    <int> 407, 329, 422, 2391, 3652, 353, 1428, 1407, 2279, 4162, 2...
+## $ origin    <chr> "JFK", "JFK", "JFK", "JFK", "LGA", "LGA", "EWR", "JFK", "...
+## $ dest      <chr> "LAX", "SJU", "LAX", "TPA", "ORF", "ORD", "HOU", "IAD", "...
+## $ air_time  <dbl> 313, 216, 376, 135, 50, 138, 240, 48, 148, 110, 50, 161, ...
+## $ distance  <dbl> 2475, 1598, 2475, 1005, 296, 733, 1411, 228, 1096, 820, 2...
+## $ hour      <dbl> 9, 16, 8, 18, 11, 18, 12, 19, 7, 13, 9, 13, 8, 20, 12, 20...
+## $ minute    <dbl> 40, 57, 59, 41, 2, 17, 59, 20, 25, 23, 40, 20, 9, 54, 17,...
+## $ dep_type  <chr> "delayed", "on time", "on time", "on time", "on time", "o...
+## $ avg_speed <dbl> 474.4409, 443.8889, 394.9468, 446.6667, 355.2000, 318.695...
+\end{verbatim}
+
+\textbf{Note the last variable is avg\_speed}
+
+\hypertarget{exercise-8}{%
+\subsubsection{Exercise 8}\label{exercise-8}}
+
+Make a scatterplot of \texttt{avg\_speed} vs.~\texttt{distance}.
+Describe the relationship between average speed and distance.
+\textbf{Hint:} Use \texttt{geom\_point()}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ nycflights, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ distance,}\DataTypeTok{y =}\NormalTok{ avg_speed)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_point}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{GCampos_Lab_Report2-Error_files/figure-latex/scat_ggplot-nycflights-avg_spd_dist-1.pdf}
+
+\hypertarget{exercise-8-answers}{%
+\subsubsection{\texorpdfstring{\textbf{Exercise 8
+Answers}}{Exercise 8 Answers}}\label{exercise-8-answers}}
+
+There is a positive association with avg\_speed and distance
+
+\hypertarget{exercise-9}{%
+\subsubsection{Exercise 9}\label{exercise-9}}
+
+Replicate the following plot. \textbf{Hint:} The data frame plotted only
+contains flights from American Airlines, Delta Airlines, and United
+Airlines, and the points are \texttt{color}ed by \texttt{carrier}. Once
+you replicate the plot, determine (roughly) what the cutoff point is for
+departure delays where you can still expect to get to your destination
+on time.
+
+\hypertarget{exercise-9-answer}{%
+\subsubsection{\texorpdfstring{\textbf{Exercise 9
+Answer}}{Exercise 9 Answer}}\label{exercise-9-answer}}
+
+First create the data frame with the appropriate data
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ex9_data<-nycflights}\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{filter}\NormalTok{(carrier}\OperatorTok{==}\StringTok{"AA"}\OperatorTok{|}\NormalTok{carrier}\OperatorTok{==}\StringTok{"DL"}\OperatorTok{|}\NormalTok{carrier}\OperatorTok{==}\StringTok{"UA"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+then create the scatter plot with color configuration using dep\_delay
+and arr\_delay based on graph provided.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data  =}\NormalTok{ ex9_data, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ dep_delay, }\DataTypeTok{y =}\NormalTok{ arr_delay, }\DataTypeTok{color =}\NormalTok{ carrier))}\OperatorTok{+}\StringTok{ }\KeywordTok{geom_point}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{GCampos_Lab_Report2-Error_files/figure-latex/sctr_ggplot-ex9_data-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ ex9_data, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{group =} \DecValTok{1}\NormalTok{, }\DataTypeTok{x =}\NormalTok{ dep_delay, }\DataTypeTok{y =}\NormalTok{ arr_delay, }\DataTypeTok{color =}\NormalTok{ carrier))}\OperatorTok{+}\StringTok{ }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}\StringTok{ }\KeywordTok{ylim}\NormalTok{(}\OperatorTok{-}\DecValTok{100}\NormalTok{,}\DecValTok{0}\NormalTok{) }\OperatorTok{+}\KeywordTok{xlim}\NormalTok{(}\OperatorTok{-}\DecValTok{100}\NormalTok{, }\DecValTok{65}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 5001 rows containing missing values (geom_point).
+\end{verbatim}
+
+\includegraphics{GCampos_Lab_Report2-Error_files/figure-latex/sctr_gg_box_plot-ex9_data-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ex9_data}\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{max_dep =} \KeywordTok{max}\NormalTok{(dep_delay[arr_delay}\OperatorTok{==}\DecValTok{0}\NormalTok{]))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 1 x 1
+##   max_dep
+##     <dbl>
+## 1      40
+\end{verbatim}
+
+\hypertarget{exercise-9-answers-part-ii}{%
+\subsubsection{\texorpdfstring{\textbf{Exercise 9 Answers Part
+II}}{Exercise 9 Answers Part II}}\label{exercise-9-answers-part-ii}}
+
+\newline
+
+Assessing the latest a person can depart and still arrive on time can be
+viewed as largest departure delay value where the arrival delay value
+equals 0. Therefore I set the app\_delay limit value between -100 to 0.
+From there I decreased the x-limit value down to 65 (as decreasing any
+more would make my largest plot point disappear).\newline \newline
+\newline To check my result I also searched the largest departure delay
+where arrival delay equals 0 using the max function.\newline
+\newline \newline I found that (roughly) the cutoff point for departure
+is between \textbf{40-65} minutes.
+
+\ldots{}
+
+\end{document}

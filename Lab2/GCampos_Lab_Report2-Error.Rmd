@@ -1,24 +1,15 @@
 ---
-title: "Introduction to data: **LAB2**"
+title: "Lab2: Intro to Data"
 author: "Gabriel Campos"
-output:
-  pdf_document: default
-  html_document:
-    includes:
-      in_header: header.html
-    css: ./lab.css
-    highlight: pygments
-    theme: cerulean
-    toc: true
-    toc_float: true
+output: 
+ pdf_document:
+        extra_dependencies: ["geometry", "multicol", "multirow"]
 editor_options: 
   chunk_output_type: console
 ---
 
-```{r global-options, include=FALSE}
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(tidyverse)
-library(openintro)
 ```
 
 ```{r load-packages, message=FALSE}
@@ -47,22 +38,20 @@ revealed in one that are obscured in another?
 ggplot(data=nycflights, aes(x = dep_delay)) +
 	geom_histogram()
 ```
-\
 ```{r hist-dep-delay-bin-15}
 ggplot(data = nycflights, aes(x = dep_delay))+
 	geom_histogram(binwidth = 15)
 ```
-\
 ```{r hist-dep_delay-bin-150}
 ggplot(data = nycflights, aes(x = dep_delay)) +
 	geom_histogram(binwidth = 150)
-
 ```
-\
+
 
 ### __Exercise 1 Answer:__
 **i)** binwidth = 15 shows departure delays before the peak amount and is symmetrical\newline\
 **ii)** binwidth = 150 shows a larger count for number of delay flights. Approximately 100 more and is left skewed.
+
 \
 
 ### Exercise 2
@@ -73,21 +62,19 @@ ggplot(data = nycflights, aes(x = dep_delay)) +
 sfo_feb_flights <- nycflights %>%
 	filter(dest == "SFO", month == 2)
 ```
-\
+
 ```{r glimpse-sfo_feb_flights}
 glimpse(sfo_feb_flights)
 ```
-\
 
 ### __Exercise 2 Answer:__
-68 flights meet these criteria.
-\
+68 flights meet these criteria.\newline
 
 ### Exercise 3
-3.	Describe the distribution of the **arrival** delays of these flights using a 
-	histogram and appropriate summary statistics. **Hint:** The summary 
-	statistics you use should depend on the shape of the distribution.
-\    
+3.  Describe the distribution of the **arrival** delays of these flights using a 
+    histogram and appropriate summary statistics. **Hint:** The summary 
+    statistics you use should depend on the shape of the distribution.
+    
 ```{r ggplot-hist-sfo_feb_arr_delay}
 ggplot(data = sfo_feb_flights, aes(x = arr_delay))+
 	geom_histogram(binwidth = 10)
@@ -96,13 +83,12 @@ ggplot(data = sfo_feb_flights, aes(x = arr_delay))+
 ### Alternative method based off of https://www.statmethods.net/graphs/density.html
 hist(sfo_feb_flights$arr_delay)
 ```
-\
+
 *Note: Histogram is symmetric and unimodal with one potential outlier.*\newline \newline
-\
 
 ### __Exercise 3 Answer:__
 For the bell curve created by the histogram, the appropriate summary statistics are the numerical stats mean, media, interquartile range, standard deviation and number of values "n".
-\
+
 ```{r summarise-sfo_feb_num_stats}
 sfo_feb_flights %>%
   summarise(mean_ad   = mean(arr_delay), 
@@ -111,42 +97,39 @@ sfo_feb_flights %>%
   			sd_ad = sd(arr_delay),
             n_ad = n())
 ```
-\
 
 ### Exercise 4
-\
-4.	Calculate the median and interquartile range for `arr_delay`s of flights in the `sfo_feb_flights` data frame, 			grouped by carrier. Which carrier has the most variable arrival delays?
-\
+
+Calculate the median and interquartile range for `arr_delay`s of flights in the `sfo_feb_flights` data frame, grouped by carrier. Which carrier has the most variable arrival delays?
+
 ```{r summarise-group-sfo_feb_num_stats}
 sfo_feb_flights %>%
 	group_by(carrier) %>%
 	summarise(median_ad = median(arr_delay), iqr_ad = IQR(arr_delay))
 ```
-\
 
 ### __Exercise 4 Answer:__
-\
+
 United Airlines Inc. (UA) and Delta Airlines Inc. (DL) have the highest interquartile range. IQR is a measure of variability. Hence the answer is UA and DL
-\
 
 ### Exercise 5
-\
-5.	Suppose you really dislike departure delays and you want to schedule 
-	your travel in a month that minimizes your potential departure delay leaving 
-	NYC. One option is to choose the month with the lowest mean departure delay.
-	Another option is to choose the month with the lowest median departure delay. 
-	What are the pros and cons of these two choices?
-\    
+
+Suppose you really dislike departure delays and you want to schedule 
+your travel in a month that minimizes your potential departure delay leaving 
+NYC. One option is to choose the month with the lowest mean departure delay.
+Another option is to choose the month with the lowest median departure delay. 
+What are the pros and cons of these two choices?
+    
     
 ```{r month_means}
 nycflights %>%
 	group_by(month) %>%
 	summarise(mean_dd = mean(dep_delay), median(dep_delay))
 ```
-\
+
 
 ### __Exercise 5 Answer:__
-\
+
 Mean is the optimal choice. An average gives a calculated value of a the potential delay for the month. The median is uncalculated, robust and less sensitive to outliers in the data set for the month (e.g. 1/2013 saw at least one triple digit delay) hence is not the best choice.
 
 **On time departure rate for NYC airports**
@@ -156,7 +139,7 @@ three major NYC airports has the best on time departure rate of departing flight
 Also supposed that for you, a flight that is delayed for less than 5 minutes is 
 basically "on time."" You consider any flight delayed for 5 minutes of more to be 
 "delayed".
-\
+
 In order to determine which airport has the best on time departure rate, 
 you can 
 
@@ -192,15 +175,15 @@ nycflights %>%
 ```
 
 ### Exercise 6
-6.		If you were selecting an airport simply based on on time departure 
-	percentage, which NYC airport would you choose to fly out of?
+If you were selecting an airport simply based on on time departure 
+percentage, which NYC airport would you choose to fly out of?
     
 ### __Exercise 6 Answer:__
 I would chose LGA or LaGuardia which has a 72.3% on time arrival percentage
 
 ### Exercise 7
-7.	Mutate the data frame so that it includes a new variable that contains the 
-	average speed, `avg_speed` traveled by the plane for each flight (in mph).
+Mutate the data frame so that it includes a new variable that contains the 
+average speed, `avg_speed` traveled by the plane for each flight (in mph).
 **Hint:** Average speed can be calculated as distance divided by
 number of hours of travel, and note that `air_time` is given in minutes.
 
@@ -225,9 +208,9 @@ glimpse(nycflights)
 **Note the last variable is avg_speed**
 
 ### Exercise 8
-8.	Make a scatterplot of `avg_speed` vs. `distance`. Describe the relationship
-	between average speed and distance.
-	**Hint:** Use `geom_point()`.
+Make a scatterplot of `avg_speed` vs. `distance`. Describe the relationship
+between average speed and distance.
+**Hint:** Use `geom_point()`.
 
 ```{r scat_ggplot-nycflights-avg_spd_dist}
 ggplot(data = nycflights, mapping = aes(x = distance,y = avg_speed)) + geom_point()
@@ -237,11 +220,11 @@ ggplot(data = nycflights, mapping = aes(x = distance,y = avg_speed)) + geom_poin
 There is a positive association with avg_speed and distance
 
 ### Exercise 9
-9.	Replicate the following plot. **Hint:** The data frame plotted only
-	contains flights from American Airlines, Delta Airlines, and United
-	Airlines, and the points are `color`ed by `carrier`. Once you replicate
-	the plot, determine (roughly) what the cutoff point is for departure
-	delays where you can still expect to get to your destination on time.
+Replicate the following plot. **Hint:** The data frame plotted only
+contains flights from American Airlines, Delta Airlines, and United
+Airlines, and the points are `color`ed by `carrier`. Once you replicate
+the plot, determine (roughly) what the cutoff point is for departure
+delays where you can still expect to get to your destination on time.
 
 ### __Exercise 9 Answer__
 First create the data frame with the appropriate data
@@ -254,7 +237,6 @@ then create the scatter plot with color configuration using dep_delay and arr_de
 ```{r sctr_ggplot-ex9_data}
 ggplot(data  = ex9_data, mapping = aes(x = dep_delay, y = arr_delay, color = carrier))+ geom_point()
 ```
-\
 ```{r sctr_gg_box_plot-ex9_data}
 ggplot(data = ex9_data, aes(group = 1, x = dep_delay, y = arr_delay, color = carrier))+ geom_point() + ylim(-100,0) +xlim(-100, 65)
 ```
@@ -263,13 +245,14 @@ ggplot(data = ex9_data, aes(group = 1, x = dep_delay, y = arr_delay, color = car
 ex9_data%>%
 	summarise(max_dep = max(dep_delay[arr_delay==0]))
 ```
-
 ### __Exercise 9 Answers Part II__
-\
-Assessing the latest a person can depart and still arrive on time can be viewed as largest departure delay 				value where the arrival delay value equals 0. Therefore I set the app_delay limit value between -100 to 0. 		From there I decreased the x-limit value down to 65 (as decreasing any more would make my largest plot point 			disappear).
-\
-To check my result I also searched the largest departure delay where arrival delay equals 0 using the max function.
-\
+\newline
+
+Assessing the latest a person can depart and still arrive on time can be viewed as largest departure delay value where the arrival delay value equals 0. Therefore I set the app_delay limit value between -100 to 0. From there I decreased the x-limit value down to 65 (as decreasing any more would make my largest plot point disappear).\newline
+\newline
+\newline
+To check my result I also searched the largest departure delay where arrival delay equals 0 using the max function.\newline
+\newline \newline
 I found that (roughly) the cutoff point for departure is between **40-65** minutes.
 
 ...
