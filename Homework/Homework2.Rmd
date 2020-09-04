@@ -34,17 +34,11 @@ scores <- c(57, 66, 69, 71, 72, 73, 74, 77, 78, 78, 79, 79, 81, 81, 82, 83, 83, 
 
 ## Question 1 Answer:
 
-```{r boxplot-scores-graphics}
-#boxplot(scores)
+```{r, echo=FALSE, fig.width=10, fig.height=5}
+library(ggplot2)
+score_val <- data.frame(group = "Introductory Statistical Scores", scores = scores)
+ggplot(score_val, aes (y=scores)) + ylim(60,100) + geom_boxplot() + coord_flip()
 ```
-
-```{r boxplot-scores-openintro}
-#boxPlot(scores)
-
-```
-
-
-
 --------------------------------------------------------------------------------
 
 \clearpage
@@ -71,9 +65,51 @@ boxPlot(sym, xlab = "(2)", ylab = "", col = COL[1,3])
 boxPlot(uni, xlab = "(3)", ylab = "", col = COL[1,3])
 ```
 
+**Histogram (a) is symmetrical so boxplot (2) is it's best match**
 
+\
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=10, fig.height=2}
+library(openintro)
+set.seed(7365)
+sym = rnorm(1000, mean = 60, sd = 3)
+uni = runif(1000, min = 0, max = 100)
+rs = rgamma(1000, shape = 3, rate = 2)
+par(mar=c(4, 3.6, 0, 0), las = 1, mgp = c(2.7, 0.7, 0), 
+    mfrow = c(1,6), 
+    cex.lab = 1.5, cex.axis = 1.5)
+histPlot(sym, xlab = "(a)", ylab = "", col = COL[1], axes = FALSE)
+axis(1, seq(50,70,10))
+boxPlot(sym, xlab = "(2)", ylab = "", col = COL[1,3])
+```
+**Histogram (b) is has multiple modals or is multimodal and so boxplot (3) is it's best match**
+\
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=10, fig.height=2}
+set.seed(7365)
+sym = rnorm(1000, mean = 60, sd = 3)
+uni = runif(1000, min = 0, max = 100)
+rs = rgamma(1000, shape = 3, rate = 2)
+par(mar=c(4, 3.6, 0, 0), las = 1, mgp = c(2.7, 0.7, 0), 
+    mfrow = c(1,6), 
+    cex.lab = 1.5, cex.axis = 1.5)
+histPlot(uni, xlab = "(b)", ylab = "", col = COL[1], axes = FALSE)
+axis(1, seq(0,100,50))
+boxPlot(uni, xlab = "(3)", ylab = "", col = COL[1,3])
+```
 
-
+**Histogram (c) is left skewed therefore it is matched with boxplot (1)**
+\
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=10, fig.height=2}
+set.seed(7365)
+sym = rnorm(1000, mean = 60, sd = 3)
+uni = runif(1000, min = 0, max = 100)
+rs = rgamma(1000, shape = 3, rate = 2)
+par(mar=c(4, 3.6, 0, 0), las = 1, mgp = c(2.7, 0.7, 0), 
+    mfrow = c(1,6), 
+    cex.lab = 1.5, cex.axis = 1.5)
+histPlot(rs, xlab = "(c)", ylab = "", col = COL[1], axes = FALSE)
+axis(1, seq(0,6,2))
+boxPlot(rs, xlab = "(1)", ylab = "", col = COL[1,3])
+```
 
 
 --------------------------------------------------------------------------------
