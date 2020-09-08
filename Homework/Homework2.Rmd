@@ -32,7 +32,6 @@ scores <- c(57, 66, 69, 71, 72, 73, 74, 77, 78, 78, 79, 79, 81, 81, 82, 83, 83, 
 
 ```
 
-## Question 1 Answer:
 
 ```{r, echo=FALSE, fig.width=10, fig.height=5}
 library(ggplot2)
@@ -119,11 +118,27 @@ boxPlot(rs, xlab = "(1)", ylab = "", col = COL[1,3])
 **Distributions and appropriate statistics, Part II**. (2.16, p. 59) For each of the following, state whether you expect the distribution to be symmetric, right skewed, or left skewed. Also specify whether the mean or median would best represent a typical observation in the data, and whether the variability of observations would be best represented using the standard deviation or IQR. Explain your reasoning.
 
 (a) Housing prices in a country where 25% of the houses cost below $350,000, 50% of the houses cost below $450,000, 75% of the houses cost below $1,000,000 and there are a meaningful number of houses that cost more than $6,000,000.
-(b) Housing prices in a country where 25% of the houses cost below $300,000, 50% of the houses cost below $600,000, 75% of the houses cost below $900,000 and very few houses that cost more than $1,200,000.
-(c) Number of alcoholic drinks consumed by college students in a given week. Assume that most of these students don't drink since they are under 21 years old, and only a few drink excessively.
-(d) Annual salaries of the employees at a Fortune 500 company where only a few high level
-executives earn much higher salaries than the all other employees.
 
+**25% = Q1 = $350,000 | 50% = Q2 = $450,000 | 75% = Q3 = $1,000,000 ** \newline
+\newline
+**Q2-Q1 < Q3-Q2 AND *"... a meaningful number of houses that cost more than $6,000,000"* indicates the distribution is right skewed. Median and IQR therefore are best used for representing a typical observation and variability, since the mean and standard deviation would shift based on the prices of the more expensive homes.**
+\newline
+\
+(b) Housing prices in a country where 25% of the houses cost below $300,000, 50% of the houses cost below $600,000, 75% of the houses cost below $900,000 and very few houses that cost more than $1,200,000.
+\newline \newline
+**The distribution is symmetric with outliers that are not in excess nor drastically more than the rest of the distribution. In this scenario, mean and standard deviation would be best.**
+\newline
+\
+(c) Number of alcoholic drinks consumed by college students in a given week. Assume that most of these students don't drink since they are under 21 years old, and only a few drink excessively.\newline
+\newline
+**The distribution is based on a population that is at or close to 0 alcoholic drinks, with only a few outliers that drink in excess. Therefore the distribution should be left-skewed, median and IQR should be used to reduce the affect of the non or excessive drinkers, since standard deviation would be sensitive to the two extremes.**
+\
+\newline
+(d) Annual salaries of the employees at a Fortune 500 company where only a few high level
+executives earn much higher salaries than the all other employees.\newline
+\newline
+**The distribution is symmetric, but because the few higher salaries are *much higher* the median and IQR should be used as in scenario (a)**
+\newline
 
 
 
@@ -154,33 +169,88 @@ boxPlot(heartTr$survtime, fact = heartTr$transplant,
 ```
 
 (a) Based on the mosaic plot, is survival independent of whether or not the 
-patient got a transplant? Explain your reasoning.
+patient got a transplant? Explain your reasoning.\newline
+**Noting the larger "dead" quantity for the control group, survival is dependent on treatment.**
+\
 (b) What do the box plots below suggest about the efficacy (effectiveness) of the heart transplant treatment.
-(c) What proportion of patients in the treatment group and what proportion of 
-patients in the control group died?
+\
+**When comparing the median of the control group**
+```{r median_surv_control}
+# mean of control survival time
+#mean(heartTr$survtime[heartTr$transplant == "control"])
+# median of control suvival time
+median(heartTr$survtime[heartTr$transplant == "control"])
+```
+
+**with that of the treatment**
+```{r median_surv_treatment}
+# mean of control survival time
+#mean(heartTr$survtime[heartTr$transplant == "treatment"])
+#median of control suvival time
+median(heartTr$survtime[heartTr$transplant == "treatment"])
+```
+\
+**We can conclude the survival rate is significantly higher for the treatment group considering the median for the control group is 21 vs 207 for the control group. The larger median and larger value outliers means there is a longer survival time for those who have a transplant compared to those that do not.**
+\
+(c) What proportion of patients in the treatment group and what proportion of
+patients in the control group died?\newline
+
+```{r calc-prop_died}
+# Get count of control and treatment
+count(heartTr,transplant)
+# proportion for treatment
+sum(heartTr$survived == "dead" & heartTr$transplant == "treatment")/sum(heartTr$transplant == "treatment")
+# proportion for treatment
+sum(heartTr$survived == "dead" & heartTr$transplant == "control")/sum(heartTr$transplant == "control")
+```
+
+
 (d) One approach for investigating whether or not the treatment is effective 
 is to use a randomization technique.
 
-i. What are the claims being tested?
+i. What are the claims being tested?\newline
+**Whether survival rate is dependent on receipt of a transplant** 
+\newline
 ii. The paragraph below describes the set up for such approach, if we were 
 to do it without using statistical software. Fill in the blanks with a number 
 or phrase, whichever is appropriate.
 
-> We write *alive* on __________ cards representing patients who were 
-alive at the end of the study, and *dead* on _________ cards 
+```{r calc-para_answers}
+# Number patients who are survivors
+sum(heartTr$survived == "alive")
+# patients who did not survive
+sum(heartTr$survived == "dead")
+# Number of patients in treatment group
+sum(heartTr$transplant == "treatment")
+# Number of patients in control group
+sum(heartTr$transplant == "control")
+```
+
+```{r calc-ratio}
+# Calculation for ration
+(1-sum(heartTr$survived == "dead" & heartTr$transplant == "treatment")/sum(heartTr$transplant == "treatment"))-(1-sum(heartTr$survived == "dead" & heartTr$transplant == "control")/sum(heartTr$transplant == "control"))
+```
+
+
+> We write *alive* on ___ [28] ___ cards representing patients who were 
+alive at the end of the study, and *dead* on ___ [75] ___ cards 
 representing patients who were not. Then, we shuffle these cards and split them 
-into two groups: one group of size _________ representing treatment, and 
-another group of size __________ representing control. We calculate the 
+into two groups: one group of size ___ [69] ___ representing treatment, and 
+another group of size ___ [34] ____ representing control. We calculate the 
 difference between the proportion of *dead* cards in the treatment and 
 control groups (treatment - control) and record this value. We repeat this 100 
-times to build a distribution centered at _________. Lastly, we calculate 
+times to build a distribution centered at __ [0] __. Lastly, we calculate 
 the fraction of simulations where the simulated differences in proportions are 
-_________. If this fraction is low, we conclude that it is unlikely to 
+__ [0.230179] __. If this fraction is low, we conclude that it is unlikely to 
 have observed such an outcome by chance and that the null hypothesis should 
 be rejected in favor of the alternative.
 
 iii. What do the simulation results shown below suggest about the effectiveness 
 of the transplant program?
+\
+\newline 
+**The chart shows that no observation had a difference of at least 23%, making the chances of such an observation 0%. Because of this we can reject the independence or null hypothesis and conclude having a heart transplant increases survival rate 100% of the time.**
+
 
 ```{r fig.height=3, fig.show="hold", message=FALSE, warning=FALSE, include=FALSE, out.width="50%", results='hide'}
 # randomization -----------------------------------------------------
