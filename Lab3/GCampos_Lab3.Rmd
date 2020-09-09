@@ -192,6 +192,7 @@ the slip of paper back in the hat before drawing again). Save the resulting
 vector of heads and tails in a new object called `sim_fair_coin`.
 
 ```{r sim-fair-coin}
+set.seed(1606)
 sim_fair_coin <- sample(coin_outcomes, size = 100, replace = TRUE)
 ```
 
@@ -209,6 +210,7 @@ that we know only lands heads 20% of the time. We can adjust for this by adding
 an argument called `prob`, which provides a vector of two probability weights.
 
 ```{r sim-unfair-coin}
+set.seed(2606)
 sim_unfair_coin <- sample(coin_outcomes, size = 100, replace = TRUE, 
                           prob = c(0.2, 0.8))
 ```
@@ -222,11 +224,16 @@ chip that says "head"" is 20%, and "tail" is 80%.
 
 ## Exercise 3
 
-1.  In your simulation of flipping the unfair coin 100 times, how many flips 
+3.  In your simulation of flipping the unfair coin 100 times, how many flips 
     came up heads? Include the code for sampling the unfair coin in your response.
     Since the markdown file will run the code, and generate a new sample each time
     you *Knit* it, you should also "set a seed" **before** you sample. Read more 
     about setting a seed below..
+    
+```{r table-sim-unfair-coin}
+sim_unfair_coin
+table(sim_unfair_coin)
+```
 
 ```{r plot-unfair_coins}
 sim_unfair_coin_df <- data.frame(sim_unfair_coin)
@@ -280,13 +287,21 @@ you need to align both their shooting percentage and the number of attempted sho
 
 ## Exercise 4
 
-1.  What change needs to be made to the `sample` function so that it reflects a 
+4.  What change needs to be made to the `sample` function so that it reflects a 
     shooting percentage of 45%? Make this adjustment, then run a simulation to 
     sample 133 shots. Assign the output of this simulation to a new object called
     `sim_basket`.
 
-```{r dim-present}
-# Insert code for Exercise 4 here
+```{r sim-basket-45}
+#Shot outcomes vector already creative above so all that is needed is the manipulation of probability
+set.seed(3606)
+sim_basket_45 <- sample(shot_outcomes, size = 133, replace = TRUE, 
+                          prob = c(0.45, 0.55))
+```
+
+```{r table-sim-basket-45}
+sim_basket_45
+	table(sim_basket_45)
 ```
 
 Note that we've named the new vector `sim_basket`, the same name that we gave to
@@ -308,11 +323,12 @@ a hot hand.
 
 ## Exercise 5
 
-1.  Using `calc_streak`, compute the streak lengths of `sim_basket`, and
+5.  Using `calc_streak`, compute the streak lengths of `sim_basket`, and
     save the results in a data frame called `sim_streak`.
 
 ```{r count-compare}
-# Insert code for Exercise 5 here
+# I decided to generate
+sim_streak <- calc_streak(sim_basket_45$shot)
 ```
 
 
