@@ -12,8 +12,18 @@ knitr::opts_chunk$set(echo = TRUE)
 
 **Dice rolls.** (3.6, p. 92) If you roll a pair of fair dice, what is the probability of
 
-(a) getting a sum of 1?
-(b) getting a sum of 5?
+(a) getting a sum of 1?\newline
+**This is not possible since all summations will be 2 or greater
+(b) getting a sum of 5?\newline
+**Possibilities \newline
+Die 1: roll a 1 Die 2: roll a 4 \newline
+Die 1: roll a 2 Die 2: roll a 3 \newline
+Die 1: roll a 3 Die 2: roll a 2 \newline
+Die 1: roll a 4 Die 2: roll a 1 \newline
+\newline
+OR can be viewed as a 1/6 chance per die to select 1 of 4 options\newline
+so 4 \* (1/6\ * 1/6) = 4/36 = 1/9
+
 (c) getting a sum of 12?
 
 

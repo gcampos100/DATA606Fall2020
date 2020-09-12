@@ -363,9 +363,27 @@ ggplot(data = sim_streak, aes(x = length)) +
     from the question above? Exactly the same? Somewhat similar? Totally 
     different? Explain your reasoning.
 
-```{r find-max-total}
-# Insert code for Exercise 7 here
+**If the simulation were ran again, with the same percentages the likelihood of the similar results would be high.**
+
+```{r calc-sim_streak_45_2}
+#Shot outcomes vector already created above so all that is needed is the manipulation of probability
+set.seed(3608)
+sim_basket_2 <- sample(shot_outcomes, size = 133, replace = TRUE, 
+                          prob = c(0.45, 0.55))
+#calc streak for new vector
+sim_streak_2 <- calc_streak(sim_basket_2)
+#plot new streak
+ggplot(data = sim_streak_2, aes(x = length)) +
+  geom_bar(alpha = 0.7)
+#summarize new streak
+sim_streak_2%>%
+	summarise(mean_strk = mean(length),
+	median_strk_2 = median(length),
+	iqr_strk_2 = IQR(length),
+	sd_strk_2 = sd(length),
+	n_strk_2 = n())
 ```
+
 
 ## Exercise 8
 
@@ -373,6 +391,8 @@ ggplot(data = sim_streak, aes(x = length)) +
     distribution of streak lengths for the simulated shooter? Using this 
     comparison, do you have evidence that the hot hand model fits Kobe's 
     shooting patterns? Explain.
+
+**The distribution is similar, which supports the conclusion that the "hot-hands" theory is not valid**
 
 * * *
 
