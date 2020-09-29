@@ -1,0 +1,28 @@
+1. normal dstributins symmetrical mode = mean = median, bell curve.
+
+mean > mode 
+
+2. 
+
+center mean median mode 
+shape symmetrical
+spread is tails and skewed.
+
+qq plot starter more normal.
+
+3. random sample data set data should follow same mean and standard deviation.
+example 3
+curving of tails for sim 5 not always positive skewed.
+
+***** get means from the qqplots****
+see if the the zscore is within 95% using the means from the sample. calculat 1,6, 5, 8
+
+
+4.
+
+https://www.google.com/search?q=modal+distribution&rlz=1C1SQJL_enUS786US786&sxsrf=ALeKk031QgI7WX-J6N7c-wAksj7CcApmRg:1600816607934&tbm=isch&source=iu&ictx=1&fir=rvFIFcZcDEgt8M%252Cl5zXfQmOYeYpiM%252C%252Fm%252F0435dv&vet=1&usg=AI4_-kQVPii_TEFZ5bsecPI_ud6pE3YjRA&sa=X&ved=2ahUKEwj6sZDK8v3rAhWHgnIEHXdUBG4Q_B16BAgMEAM#imgrc=mU8J3pJE4DPj5M&imgdii=E3XxLm78NsW7YM
+
+https://www.google.com/search?q=modal+distribution&rlz=1C1SQJL_enUS786US786&sxsrf=ALeKk031QgI7WX-J6N7c-wAksj7CcApmRg:1600816607934&tbm=isch&source=iu&ictx=1&fir=rvFIFcZcDEgt8M%252Cl5zXfQmOYeYpiM%252C%252Fm%252F0435dv&vet=1&usg=AI4_-kQVPii_TEFZ5bsecPI_ud6pE3YjRA&sa=X&ved=2ahUKEwj6sZDK8v3rAhWHgnIEHXdUBG4Q_B16BAgMEAM#imgrc=mU8J3pJE4DPj5M&imgdii=E3XxLm78NsW7YM
+
+https://www.google.com/search?q=distribution+positively+skewed+plots&rlz=1C1SQJL_enUS786US786&oq=distribution+positively+skewed+plots&aqs=chrome..69i57j33.9528j1j7&sourceid=chrome&ie=UTF-8
+

@@ -1,0 +1,123 @@
+---
+title: "Presentation:"
+subtitle: "CHAPTER 4. DISTRIBUTIONS OF RANDOM VARIABLES"
+author: "Gabriel Campos"
+date: "9/27/2020"
+output:
+  pdf_document: default
+  html_document:
+    includes:
+      in_header: header.html
+    css: ./lab.css
+    highlight: pygments
+    theme: cerulean
+    toc: true
+    toc_float: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library('DATA606')
+library(tidyverse)
+library(openintro)
+```
+
+# Question 4.3 pg.142
+
+## GRE scores, Part I. 
+
+Sophia who took the Graduate Record Examination (GRE) scored **160** on the Verbal Reasoning section and **157** on the Quantitative Reasoning section. The mean score for Verbal Reasoning section for **all** test takers was **151** with a **standard deviation** of **7**, and the mean score for the Quantitative Reasoning was **153** with a **standard deviation** of **7.67**. Suppose that both distributions are nearly normal.
+
+
+## (a)
+Write down the short-hand for these two normal distributions.\newline
+*Reference Section 4.1 pg. 133*\newline
+\
+**Verbal reasoning section: N($\mu$ = 151, $\sigma$ = 7)** \newline
+**Quantitative Reasoning section: N($\mu$ = 153, $\sigma$ = 7.67)**\newline
+
+## (b)
+### (i)
+What is Sophia’s Z-score on the Verbal Reasoning section?\newline 
+*Reference 4.1.2 pg. 134* \newline
+\
+**Z = $\frac{x-\mu}{\sigma}$ Where $x_{verbal}$=160** \newline
+```{r}
+(160-151)/7
+```
+### (ii)
+On the Quantitative Reasoning section?\newline
+**Where $x_{quantitive}$=157** \newline
+```{r}
+(157-153)/7.67
+```
+
+### (iii)
+Draw a standard normal distribution curve and mark these two Z-scores.\newline
+
+```{r Verbal, echo=FALSE}
+pnorm(1.285714)
+normalPlot(bound = c(-Inf,1.285714))
+```
+
+--------------------------------------------------------------------------------
+
+\clearpage
+
+### (iv)
+
+```{r Quantitive, echo=FALSE}
+pnorm(0.5215124)
+normalPlot(bound = c(-Inf,0.5215124))
+```
+
+## (c)
+What do these Z-scores tell you?\newline
+**The Z-scores tell us how far above the mean Sophia scored for each section.**\newline
+**For the verbal section Sophia scored 1.285714 standard deviations above the mean.**\newline
+**For the quantitative section Sophia scored 0.5215124 standard deviations above the mean.**\newline
+
+## (d)
+Relative to others, which section did she do better on?\newline
+**Sophia's Z-score for the Verbal Reasoning Section is higher indicating she did better on that section relative to others** \newline
+
+--------------------------------------------------------------------------------
+
+\clearpage
+
+## (e)
+Find her percentile scores for the two exams.
+*Using normalPlot() or pnorm() results about*\newline
+
+**Verbal Reasoning Section: 90th percentile** \newline
+**Quantitative Reasoning Section: 70th percentile** \newline
+\
+
+## (f)
+### (i)
+What percent of the test takers did better than her on the Verbal Reasoning section?\newline
+*Using 1-pnorm(Z-score) where one represents 100% of the population minus Sophia's percentile ranking*\newline
+*Or subtracting percentages provided e.g. 100% - 90% = 10%* \newline
+**10% of the test takers did better than Sophia on Verbal Reasoning Section**\newline
+```{r}
+1-pnorm(1.285714)
+```
+### (ii)
+On the Quantitative Reasoning section?\newline
+*Using 1-pnorm(Z-score) where one represents 100% of the population minus Sophia's percentile ranking*\newline
+*Or subtracting percentages provided e.g. 100% - 70% = 30%* \newline
+**30% of the test takers did better than Sophia on Verbal Reasoning Section**\newline
+```{r}
+1-pnorm(0.5215124)
+```
+
+## (g)
+Explain why simply comparing raw scores from the two sections could lead to an incorrect conclusion as to which section a student did better on.\newline
+**The weight of Sophia's raw score is on a different scaling system, so comparing her performance against the population makes sense in concluding how well she did.** \newline
+
+## (h)
+If the distributions of the scores on these exams are not nearly normal, would your answers to parts (b)-(f) change? Explain your reasoning.\newline
+**Z-scores will still be calculated with the same formula, but without a nearly normal distribution, we would not be able to use the normal probability table. Therefore we could answer (b)-(c) but not (d)-(f).**
+

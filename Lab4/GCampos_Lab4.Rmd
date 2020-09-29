@@ -52,6 +52,10 @@ library(openintro)
 head(fastfood)
 ```
 
+```{r}
+unique(fastfood$restaurant)
+```
+
 You'll see that for every observation there are 17 measurements, many of which are
 nutritional facts.
 
@@ -115,7 +119,7 @@ You'll be focusing on calories from fat from Dairy Queen products, so let's stor
 them as a separate object and then calculate some statistics that will be referenced 
 later. 
 
-```{r female-hgt-mean-sd}
+```{r dqmean-mean-sd}
 dqmean <- mean(dairy_queen$cal_fat)
 dqsd   <- sd(dairy_queen$cal_fat)
 ```
@@ -202,7 +206,7 @@ as well as its normal probability plot.
     data? (Since `sim_norm` is not a dataframe, it can be put directly into the 
     `sample` argument and the `data` argument can be dropped.)\newline
     \newline
-    **The plot below most reflects is ver close to appearing normally distributed, but the volatility is still reason not to conclude it is**
+    **The plot below appears seems very close to being normally distributed, but the volatility is still reason not to conclude it is. The real data is right skewed with a long tail therefore it the real data is further from being normally distributed than the simulation **
     
 
 ```{r plot-sim_norm}
@@ -224,11 +228,39 @@ qqnormsim(sample = cal_fat, data = dairy_queen)
 
 
 4.  Does the normal probability plot for the calories from fat look similar to the plots 
-    created for the simulated data?  That is, do the plots provide evidence that the
-    female heights are nearly normal?
+    created for the simulated data? 
+   \newline
+   ** With exception of sim1, sim2 and sim8 the plot do share similar attributes with a long tail and right skewed image, the latter differs in that they have short tails. FOr the most part they are similar.**
+   \newline
 
 5.  Using the same technique, determine whether or not the calories from McDonald's
-    menu appear to come from a normal distribution.
+    menu appear to come from a normal distribution.\newline
+    \
+    
+```{r mcdmean-mean-sd}
+mcdmean <- mean(mcdonalds$cal_fat)
+mcdsd   <- sd(mcdonalds$cal_fat)
+```
+    
+```{r mcdonalds}
+ggplot(data = mcdonalds, aes(sample = cal_fat)) + 
+  geom_line(stat = "qq")
+```
+    
+```{r sim-norm-mcd}
+set.seed(9607)
+sim_norm_mcd <- rnorm(n = nrow(mcdonalds), mean = mcdmean, sd = mcdsd)
+```
+
+```{r plot-sim_norm-mcd}
+ggplot(data = mcdonalds, aes(sample = sim_norm_mcd)) + 
+  geom_line(stat = "qq", size=2)
+```
+
+```{r qqnormsim_mcd}
+qqnormsim(sample = cal_fat, data = mcdonalds)
+```
+
 
 ## Normal probabilities
 
@@ -274,23 +306,247 @@ theoretical probabilities will be.
     of the restaurants in this dataset.  Calculate those probabilities using both
     the theoretical normal distribution as well as the empirical distribution 
     (four probabilities in all).  Which one had a closer agreement between the 
-    two methods?
+    two methods?\newline
+\newline
+** "What is the probability that a randomly chosen Mcdonalds product has more than 600 calories from fat?"**
 
+```{r pnorm_300}
+1 - pnorm(q = 300, mean = mcdmean, sd = mcdsd)
+```
+
+```{r probability_300}
+mcdonalds %>% 
+  filter(cal_fat > 300) %>%
+  summarise(percent = n() / nrow(mcdonalds))
+```
+
+\
+** "What is the probability that a randomly chosen Mcdonalds product has more than 20g of total fat?"**
+
+```{r mcdfat-mean-sd}
+mcdmean_fat<- mean(mcdonalds$total_fat)
+mcdsd_fat<- sd(mcdonalds$total_fat)
+```
+
+```{r pnorm_20}
+1 - pnorm(q = 20, mean = mcdmean_fat, sd = mcdsd_fat)
+```
+
+```{r probability_20}
+mcdonalds %>% 
+  filter(total_fat > 20) %>%
+  summarise(percent = n() / nrow(mcdonalds))
+```
+
+\
+\
 * * *
 
 ## More Practice
 
 7.  Now let's consider some of the other variables in the dataset.  Out of all the
-    different restaurants, which ones' distribution is the closest to normal for sodium?
-   
+    different restaurants, which ones' distribution is the closest to normal for sodium?\newline
+    ** Burger King and Arby's sodium distribution's are closest to normal **
+    \newline
+    \
+    
+```{r show restaurant names}
+unique(fastfood$restaurant)
+```
+    
+```{r filter_tables}
+#filter for use of graphs
+chikfila <- fastfood %>%
+  filter(restaurant == "Chick Fil-A")
+sonic <- fastfood %>%
+  filter(restaurant == "Sonic")
+arby <- fastfood %>%
+  filter(restaurant == "Arbys")
+bk <- fastfood %>%
+  filter(restaurant == "Burger King")
+subway <- fastfood %>%
+  filter(restaurant == "Subway")
+taco_bell <- fastfood %>%
+  filter(restaurant == "Taco Bell")
+```
+    
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=3.5, fig.height=3}
+mc_s<-c(mcdonalds$sodium)
+mc_s_median<-median(mc_s)
+ggplot(data = mcdonalds, aes(x= sodium))+
+	geom_histogram(aes(y = ..density..),
+				   binwidth = 50, colour = "purple", fill = "white") +
+						   	geom_density(alpha = .1, fill = "blue")+
+	geom_vline(aes(xintercept = mean(sodium)),
+             colour = "red", linetype ="longdash", size =1)+
+	geom_vline(aes(xintercept = mc_s_median), colour="green", size = 1)+
+	ggtitle("McDonald's sodium")
+
+ggplot(data = mcdonalds, aes(sample = sodium)) + 
+  geom_point(stat = "qq")+
+	ggtitle("McDonald's sodium")
+
+```
+    
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=3.5, fig.height=3}
+dq_s<-c(dairy_queen$sodium)
+dq_s_median<-median(dq_s)
+ggplot(data = dairy_queen, aes(x= sodium))+
+	geom_histogram(aes(y = ..density..),
+				   binwidth = 50, colour = "purple", fill = "white") +
+						   	geom_density(alpha = .1, fill = "blue")+
+	geom_vline(aes(xintercept = mean(sodium)),
+             colour = "red", linetype ="longdash", size =1)+
+	geom_vline(aes(xintercept = dq_s_median), colour="green", size = 1)+
+	ggtitle("Dairy Queen's sodium")
+
+ggplot(data = dairy_queen, aes(sample = sodium)) + 
+  geom_point(stat = "qq")+
+	ggtitle("Dairy Queen's sodium")
+
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=3.5, fig.height=3}
+cfa_s<-c(chikfila$sodium)
+cfa_s_median<-median(cfa_s)
+ggplot(data = chikfila, aes(x= sodium))+
+	geom_histogram(aes(y = ..density..),
+				   binwidth = 50, colour = "purple", fill = "white") +
+						   	geom_density(alpha = .1, fill = "blue")+
+	geom_vline(aes(xintercept = mean(sodium)),
+             colour = "red", linetype ="longdash", size =1)+
+	geom_vline(aes(xintercept = cfa_s_median), colour="green", size = 1)+
+	ggtitle("Chick Fil-a's sodium")
+
+ggplot(data = chikfila, aes(sample = sodium)) + 
+  geom_point(stat = "qq")+
+	ggtitle("Chik Fil-a's sodium")
+
+```   
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=3.5, fig.height=3}
+s_s<-c(sonic$sodium)
+s_s_median<-median(s_s)
+ggplot(data = sonic, aes(x= sodium))+
+	geom_histogram(aes(y = ..density..),
+				   binwidth = 50, colour = "purple", fill = "white") +
+						   	geom_density(alpha = .1, fill = "blue")+
+	geom_vline(aes(xintercept = mean(sodium)),
+             colour = "red", linetype ="longdash", size =1)+
+	geom_vline(aes(xintercept = s_s_median), colour="green", size = 1)+
+	ggtitle("Sonic's sodium")
+
+ggplot(data = sonic, aes(sample = sodium)) + 
+  geom_point(stat = "qq")+
+	ggtitle("Sonic's sodium")
+
+```  
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=3.5, fig.height=3}
+a_s<-c(arby$sodium)
+a_s_median<-median(a_s)
+ggplot(data = arby, aes(x= sodium))+
+	geom_histogram(aes(y = ..density..),
+				   binwidth = 50, colour = "purple", fill = "white") +
+						   	geom_density(alpha = .1, fill = "blue")+
+	geom_vline(aes(xintercept = mean(sodium)),
+             colour = "red", linetype ="longdash", size =1)+
+	geom_vline(aes(xintercept = a_s_median), colour="green", size = 1)+
+	ggtitle("Arby's sodium")
+
+ggplot(data = arby, aes(sample = sodium)) + 
+  geom_point(stat = "qq")+
+	ggtitle("Arby's sodium")
+
+```  
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=3.5, fig.height=3}
+bk_s<-c(bk$sodium)
+bk_s_median<-median(bk_s)
+ggplot(data = bk, aes(x= sodium))+
+	geom_histogram(aes(y = ..density..),
+				   binwidth = 50, colour = "purple", fill = "white") +
+						   	geom_density(alpha = .1, fill = "blue")+
+	geom_vline(aes(xintercept = mean(sodium)),
+             colour = "red", linetype ="longdash", size =1)+
+	geom_vline(aes(xintercept = bk_s_median), colour="green", size = 1)+
+	ggtitle("Burger King's sodium")
+
+ggplot(data = bk, aes(sample = sodium)) + 
+  geom_point(stat = "qq")+
+	ggtitle("Burger Kings's sodium")
+
+``` 
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=3.5, fig.height=3}
+sb_s<-c(subway$sodium)
+sb_s_median<-median(sb_s)
+ggplot(data = subway, aes(x= sodium))+
+	geom_histogram(aes(y = ..density..),
+				   binwidth = 50, colour = "purple", fill = "white") +
+						   	geom_density(alpha = .1, fill = "blue")+
+	geom_vline(aes(xintercept = mean(sodium)),
+             colour = "red", linetype ="longdash", size =1)+
+	geom_vline(aes(xintercept = sb_s_median), colour="green", size = 1)+
+	ggtitle("Subway's sodium")
+
+ggplot(data = subway, aes(sample = sodium)) + 
+  geom_point(stat = "qq")+
+	ggtitle("Subway's sodium")
+
+``` 
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=3.5, fig.height=3}
+t_s<-c(taco_bell$sodium)
+t_s_median<-median(t_s)
+ggplot(data = taco_bell, aes(x= sodium))+
+	geom_histogram(aes(y = ..density..),
+				   binwidth = 50, colour = "purple", fill = "white") +
+						   	geom_density(alpha = .1, fill = "blue")+
+	geom_vline(aes(xintercept = mean(sodium)),
+             colour = "red", linetype ="longdash", size =1)+
+	geom_vline(aes(xintercept = t_s_median), colour="green", size = 1)+
+	ggtitle("Taco Bell's sodium")
+
+ggplot(data = subway, aes(sample = sodium)) + 
+  geom_point(stat = "qq")+
+	ggtitle("Taco Bell's sodium")
+
+``` 
+
+\
+
 8.  Note that some of the normal probability plots for sodium distributions seem
-    to have a stepwise pattern. why do you think this might be the case?
+    to have a stepwise pattern. why do you think this might be the case?\newline
+\
+    **Those that appear to have a stepwise pattern are the most near to a normal distribution, since those charts have data that almost completely on a straight line**
+\newline
+\
 
 9.  As you can see, normal probability plots can be used both to assess 
     normality and visualize skewness.  Make a normal probability plot for the total
     carbohydrates from a restaurant of your choice.  Based on this normal 
     probability plot, is this variable left skewed, symmetric, or right skewed?  
-    Use a histogram to confirm your findings.
+    Use a histogram to confirm your findings.\newline
+\
+    **The data is left skewed with a right tail, it is symmetric and very near normally distibuted with a mean and medium almost equal in value**
+\   
+```{r taco-bell-q-nine}
+t_carb<-c(taco_bell$total_carb)
+t_carb_median<-median(t_carb)
+ggplot(data = taco_bell, aes(x= total_carb))+
+	geom_histogram(aes(y = ..density..),
+				   binwidth = 50, colour = "purple", fill = "white") +
+						   	geom_density(alpha = .1, fill = "blue")+
+	geom_vline(aes(xintercept = mean(total_carb)),
+             colour = "red", linetype ="longdash", size =1)+
+	geom_vline(aes(xintercept = t_carb_median), colour="green", size = 1)+
+	ggtitle("Taco Bell's carbohydrates")
+```
+    
 
 
 * * *
