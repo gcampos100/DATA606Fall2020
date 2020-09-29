@@ -16,7 +16,7 @@ editor_options:
 ---
 
 ```{r global_options, include=FALSE}
-knitr::opts_chunk$set(eval = TRUE, results = FALSE, fig.show = "hide", message = FALSE)
+knitr::opts_chunk$set(eval = TRUE, results = FALSE, fig.show = "hold", message = FALSE)
 set.seed(1234)
 ```
 
@@ -109,7 +109,8 @@ This command collects a simple random sample of size 50 from the `global_monitor
 This is similar to randomly drawing names from a hat that contains the names of all in the population.
 Working with these 50 names is considerably simpler than working with all 100,000 people in the population.
 
-1.  Describe the distribution of responses in this sample. How does it compare to the 
+## 1.
+	Describe the distribution of responses in this sample. How does it compare to the 
     distribution of responses in the population. **Hint:** Although the `sample_n` 
     function takes a random sample of observations (i.e. rows) from the dataset, 
     you can still refer to the variables in the dataset with the same names. Code 
@@ -118,6 +119,12 @@ Working with these 50 names is considerably simpler than working with all 100,00
     `p` since you're now calculating a sample statistic, not a population parameters. 
     You can customize the label of the statistics to indicate that it comes from 
     the sample.
+    
+```{r}
+
+```
+    
+    
 
 If you're interested in estimating the proportion of all people who do not believe that the work scientists do benefits them, but you do not have access to the population data, your best single guess is the sample mean.
 
