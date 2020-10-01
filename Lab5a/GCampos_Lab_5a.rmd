@@ -181,7 +181,7 @@ In general, though, the sample proportion turns out to be a pretty good estimate
     expect the proportions to be somewhat different or very different? Ask a 
     student team to confirm your answer.
     
-**No. With *n* being relatively small, we can expect the results to deviate and most likely will not match, but will be nearly the same**
+**No. With the sample size being relatively small, we can expect the results to deviate and most likely will not match, but will be nearly the same**
 
 ### 3.
 
@@ -500,34 +500,99 @@ You are welcome to use the app for exploration.
 
 \
 	Take a sample of size 15 from the population and calculate the proportion of 
-    people in this sample who think the work scientists do enchance their lives. 
+    people in this sample who think the work scientists do enhance their lives. 
     Using this sample, what is your best point estimate of the population proportion 
-    of people who think the work scientists do enchance their lives?
+    of people who think the work scientists do enhance their lives?
+\
+```{r samp15_7,echo=FALSE, include=FALSE}
+samp15_7 <- global_monitor %>%
+  sample_n(15)
+
+samp15_7 %>%
+  count(scientist_work) %>%
+  mutate(sample_sample15_7 = n /sum(n))
+```
+
+```{r samp15_7_p_hat,echo=FALSE}
+samp15_7_p_hat <- samp15_7 %>% 
+  count(scientist_work) %>% 
+  mutate(samp15_7_p_hat = n /sum(n)) %>% 
+  filter(scientist_work == "Benefits") %>% 
+  pull(samp15_7_p_hat) %>% 
+  round(2)
+```
+
+```{r bar-plot-Q7, fig.height=2.5, fig.width=10, echo=FALSE}
+ggplot(samp15_7, aes(x = scientist_work)) +
+  geom_bar(colour = "blue", fill = "green") +
+  labs(
+    x = "", y = "",
+    title = "Does your sample believe that the work scientists do benefit people like you?"
+  ) +
+  coord_flip() 
+```    
+
+```{r bar-plot-Q7_2, fig.height=2.5, fig.width=10, echo=FALSE}
+ggplot(samp15_7, aes(x = scientist_work)) +
+  geom_bar(colour = "blue", fill = "blue") +
+  labs(
+    x = "", y = "",
+    title = "Does your sample believe that the work scientists do benefit people like you?"
+  ) 
+  
+```
+
+
+**My best point estimate of the population proportion of people who think the work scientists do enhance their lives is `r samp15_7_p_hat` b/c my entire sample set select were for *"Benefits"* .**
+
 \
 
-```{r question7, echo=FALSE}
+
+
+### 8.
+
+\
+	Since you have access to the population, simulate the sampling 
+    distribution of proportion of those who think the work scientists do enhance 
+    their lives for samples of size 15 by taking 2000 samples from the population 
+    of size 15 and computing 2000 sample proportions. Store these proportions in 
+    as `sample_props15`. Plot the data, then describe the shape of this sampling 
+    distribution. Based on this sampling distribution, what would you guess the 
+    true proportion of those who think the work scientists do enhance their lives 
+    to be? Finally, calculate and report the population proportion.
+
+\
+
+```{r question8, echo=FALSE}
 
 sample_props_15_benefits<- global_monitor %>%
-                    rep_sample_n(size = 15, reps = 15000, replace = TRUE) %>%
+                    rep_sample_n(size = 15, reps = 2000, replace = TRUE) %>%
                     count(scientist_work) %>%
                     mutate(p_hat = n /sum(n)) %>%
                     filter(scientist_work == "Benefits")
 sample_props_15_benefits
 ```
 
-**Answer `r sample_props_15_benefits` to the question**
+```{r, include=FALSE}
+Q8p_hat<-c(sample_props_15_benefits$p_hat)
+Q8p_hat_median<-median(Q8p_hat)
+```
 
-### 8.
+```{r echo=FALSE}
+ggplot(data = sample_props_15_benefits, aes(x = p_hat)) +
+  geom_histogram(binwidth = 0.02, colour = "purple", fill = "white") +
+  labs(
+    x = "p_hat (Does benefit)",
+    title = "Sampling distribution of p_hat",
+    subtitle = "Sample size = 15, Number of samples = 2000")+
+ 	geom_density(alpha = .2, fill = "blue")+
+	geom_vline(aes(xintercept = mean(p_hat)),colour = "red", linetype ="longdash", size =1)+
+	geom_vline(aes(xintercept = Q8p_hat_median), colour="green", size = 1)
+	
+```
 
-\
-	Since you have access to the population, simulate the sampling 
-    distribution of proportion of those who think the work scientists do enchances 
-    their lives for samples of size 15 by taking 2000 samples from the population 
-    of size 15 and computing 2000 sample proportions. Store these proportions in 
-    as `sample_props15`. Plot the data, then describe the shape of this sampling 
-    distribution. Based on this sampling distribution, what would you guess the 
-    true proportion of those who think the work scientists do enchances their lives 
-    to be? Finally, calculate and report the population proportion.
+![Alt text](15.png)
+**The shape of the data is right skewed, but nearly symmetrical. The population portion is .80 and the assumption regarding the population, is that 80% of the population feel that working scientists enhance their lives**
 
 ### 9.
 
@@ -537,8 +602,50 @@ sample_props_15_benefits
     new object called `sample_props150`. Describe the shape of this sampling 
     distribution and compare it to the sampling distribution for a sample 
     size of 15. Based on this sampling distribution, what would you guess to 
-    be the true proportion of those who think the work scientists do enchances 
+    be the true proportion of those who think the work scientists do enhances 
     their lives?
+\
+```{r Q9_2,echo=FALSE, include=FALSE}
+sample_props150 <- global_monitor %>%
+  sample_n(15)
+
+sample_props150 %>%
+  count(scientist_work) %>%
+  mutate(sample_sample_props150 = n /sum(n))
+```
+
+```{r Q9_3,echo=FALSE}
+sample_props150_p_hat <- sample_props150 %>% 
+  count(scientist_work) %>% 
+  mutate(sample_props150_p_hat = n /sum(n)) %>% 
+  filter(scientist_work == "Benefits") %>% 
+  pull(sample_props150_p_hat) %>% 
+  round(2)
+```
+
+```{r bar-plot-Q9, fig.height=2.5, fig.width=10, echo=FALSE}
+ggplot(sample_props150, aes(x = scientist_work)) +
+  geom_bar(colour = "blue", fill = "green") +
+  labs(
+    x = "", y = "",
+    title = "Does your sample believe that the work scientists do benefit people like you?"
+  ) +
+  coord_flip() 
+```    
+
+```{r bar-plot-Q9_2, fig.height=2.5, fig.width=10, echo=FALSE}
+ggplot(sample_props150, aes(x = scientist_work)) +
+  geom_bar(colour = "blue", fill = "blue") +
+  labs(
+    x = "", y = "",
+    title = "Does your sample believe that the work scientists do benefit people like you?"
+  ) 
+  
+```
+
+
+**The proportion for the sample of size 150 is `r sample_props150_p_hat`. The data is clearly more proportion than the sample size 15 which gave the impression the entire population saw the benefits, and is closer to the real results of the given population.**
+    
 
 ### 10.
 
@@ -546,6 +653,8 @@ sample_props_15_benefits
 	Of the sampling distributions from 2 and 3, which has a smaller spread?  If
     you're concerned with making estimates that are more often close to the 
     true value, would you prefer a sampling distribution with a large or small spread?
+\
+ **3 had the larger spread 100>50. Based on the results I would prefer the a larger spread to ensure accuracy**   
 
 * * *
 
