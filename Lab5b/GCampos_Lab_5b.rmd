@@ -333,6 +333,7 @@ shinyApp(
 )
 ```
 
+\clearpage
 
 ### 6.
 \
@@ -342,11 +343,13 @@ shinyApp(
     Is this proportion exactly equal to the confidence level? If not, explain why. 
     Make sure to include your plot in your answer.
 \
-**Based on the findings below, 3 out the 50 did not include the true population proportion, meaning that is not exactly equal to the confidence level, being short by 1% \newline *94%<95%* **\newline
+**Based on the findings below, 3 out the 50 did not include the true population proportion, meaning that is not exactly equal to the confidence level, being short by 1%** \newline 
+**(*94%<95%*)**\newline
 \
 
 ![Alt text](6.png)
 
+\clearpage
 
 
 * * *
@@ -356,12 +359,19 @@ shinyApp(
 ### 7.
 \
 	Choose a different confidence level than 95%. Would you expect a confidence 
-    interval at this level to me wider or narrower than the confidence interval 
+    interval at this level to be wider or narrower than the confidence interval 
     you calculated at the 95% confidence level? Explain your reasoning.
+\
+
+**Decreasing the confidence interval which is what I decreases the error boundaries, and can physically be seen on the boundaries in a normal curve. This in turn makes the confidence interval *NARROWER* than the interval for 95%**
+
+![Alt text](7.png)
+
+\clearpage
 
 ### 8.
 \
-	Using code from the **infer** package and data fromt the one sample you have 
+	Using code from the **infer** package and data from the one sample you have 
     (`samp`), find a confidence interval for the proportion 
     of US Adults who think climate change is affecting their local community with a 
     confidence level of your choosing (other than 95%) and interpret it.
