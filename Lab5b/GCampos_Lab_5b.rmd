@@ -43,6 +43,7 @@ Let's load the packages.
 library(tidyverse)
 library(openintro)
 library(infer)
+library(shiny)
 ```
 
 ### Creating a reproducible lab report
@@ -183,8 +184,8 @@ To recap: even though we don't know what the full population looks like, we're 9
 ## Questions 3-6
 
 ### 3.
-
->	In the interpretation above, we used the phrase "95% confident". What does "95% confidence" mean?\newline
+\
+	In the interpretation above, we used the phrase "95% confident". What does "95% confidence" mean?\newline
 \
 **It's the range of values where we have a 95% of confidence that the value contains the true mean of the population, or where the sample population mean is accurate compared to the actual population**\newline
 
@@ -192,7 +193,7 @@ In this case, you have the rare luxury of knowing the true population proportion
 
 ### 4.
 \
->	Does your confidence interval capture the true population proportion of US adults 
+	Does your confidence interval capture the true population proportion of US adults 
     who think climate change affects their local community? If you are working on this 
 	lab in a classroom, does your neighbor's interval capture this value? \newline
 \
@@ -205,6 +206,8 @@ samp %>%
   calculate(stat = "prop") %>%
   get_ci(level = 0.95)
 ```
+
+\clearpage
 
 ### 5.  
 \
@@ -223,7 +226,7 @@ In the next part of the lab, you will collect many samples to learn more about h
 Doing this would require learning programming concepts like iteration so that you can automate repeating running the code you've developed so far many times to obtain many (50) confidence intervals. 
 In order to keep the programming simpler, we are providing the interactive app below that basically does this for you and created a plot similar to Figure 5.6 on [OpenIntro Statistics, 4th Edition (page 182)](https://www.openintro.org/os).
 
-```{r shiny, echo=FALSE, eval=FALSE, results = TRUE}
+```{r shiny, echo=FALSE, eval=FALSE, results = TRUE, include=FALSE}
 # This R chunk will only run in interactive mode
 store_ci <- function(i, n, reps, conf_level, success) {
   us_adults %>%
@@ -347,6 +350,12 @@ shinyApp(
 **(*94%<95%*)**\newline
 \
 
+```{r, include=FALSE}
+47/50
+```
+
+
+
 ![Alt text](6.png)
 
 \clearpage
@@ -363,7 +372,7 @@ shinyApp(
     you calculated at the 95% confidence level? Explain your reasoning.
 \
 
-**Decreasing the confidence interval which is what I decreases the error boundaries, and can physically be seen on the boundaries in a normal curve. This in turn makes the confidence interval *NARROWER* than the interval for 95%**
+**Decreasing the confidence interval, which is what I did, decreases the error boundaries, and can physically be seen on the boundaries in a normal curve. This in turn makes the confidence interval *NARROWER* than the interval for 95%**
 
 ![Alt text](7.png)
 
@@ -375,6 +384,17 @@ shinyApp(
     (`samp`), find a confidence interval for the proportion 
     of US Adults who think climate change is affecting their local community with a 
     confidence level of your choosing (other than 95%) and interpret it.
+\
+
+**A confidence level of 99% gave me the limits .517-.817 indicating that with 99% certainty the true mean lies between the intervals .517-.817**
+
+```{r Q8, echo=FALSE}
+samp %>%
+  specify(response = climate_change_affects, success = "Yes") %>%
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "prop") %>%
+  get_ci(level = 0.99)
+```
 
 ### 9.
 \
@@ -383,6 +403,18 @@ shinyApp(
     the proportion of intervals that include the true population proportion. 
     How does this percentage compare to the confidence level selected for the 
     intervals?
+\
+
+```{r, include=FALSE}
+49/50
+```
+
+
+**1 out of the 50 samples was outside the interval which is consistent with the 99% confidence, providing us a 98% accuracy**
+
+![Alt text](9.png)
+
+\clearpage
     
 ### 10.  
 \
@@ -393,16 +425,48 @@ shinyApp(
     and calculate the proportion of intervals that are capture the true population 
     proportion.
 
+**A confidence level of 25% gave me the limits .65-683, I expected a very narrow interval considering the low confidence level. The proportion capture is 19/100 intervals or 19% which is relatively close to our confidence level.**
+
+![Alt text](10.png)
+    
+```{r, include=FALSE}
+5/50
+```
+
+    
+```{r Q10, include=FALSE}
+samp %>%
+  specify(response = climate_change_affects, success = "Yes") %>%
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "prop") %>%
+  get_ci(level = 0.25)
+```
+
+\clearpage
+
 ### 11.  
 \
 	Using the app, experiment with different sample sizes and comment on how the 
     widths of intervals change as sample size changes (increases and decreases).
+\
+
+**The widths of the intervals decrease.**
+
+![Alt text](11_1.png)
+![Alt text](11_2.png)
+![Alt text](11_3.png)
+![Alt text](11_4.png)
+
+\clearpage
     
 ### 12.  
 \
 	Finally, given a sample size (say, 60), how does the width of the interval change 
     as you increase the number of bootstrap samples. **Hint:** Does changing the 
-    number of bootstap samples affect the standard error?
+    number of bootstrap samples affect the standard error?
+\    
+
+**The width of the interval change increases with the number of boot straps, which makes sense since increasing bootstraps increases SE b/c the mean will have more variability**
 
 * * *
 
