@@ -62,9 +62,9 @@ The researchers take another random sample of physically active individuals. Wou
 The sample means obtained are point estimates for the mean height of all active individuals, if the sample of individuals is equivalent to a simple random sample. What measure do we use to quantify the variability of such an estimate (Hint: recall that $SD_x = \frac{\sigma}{\sqrt{n}}$)? Compute this quantity using the data from the original sample under the condition that the data are a simple random sample.\newline
 **The measure to quantify the variability is Standard Error. SE is represented by $SD_x = \frac{\sigma}{\sqrt{n}}$) where**\newline 
 **$\sigma$ = 9.407205 and n = 507** \newline
-**ANSWER:**
+
 ```{r, echo=FALSE}
-sd(bdims$hgt/sqrt(507))
+paste0("ANSWER: ",sd(bdims$hgt/sqrt(507)))
 ```
 
 
@@ -75,7 +75,7 @@ sd(bdims$hgt/sqrt(507))
 
 \clearpage
 
-## Thanksgiving spending, Part I.
+## Thanksgiving spending, Part I
 
 The 2009 holiday retail season, which kicked off on November 27, 2009 (the day after Thanksgiving), had been marked by somewhat lower self-reported consumer spending than was seen during the comparable period in 2008. To get an estimate of consumer spending, 436 randomly sampled American adults were surveyed. Daily consumer spending for the six-day period after Thanksgiving, spanning the Black Friday weekend and Cyber Monday, averaged $84.71. A 95% confidence interval based on this sample is ($80.31, $89.11). Determine whether the following statements are true or false, and explain your reasoning.
 
@@ -94,22 +94,22 @@ We are 95% confident that the average spending of these 436 American adults is b
 ### (b)
 
 This confidence interval is not valid since the distribution of spending in the sample is right skewed.\newline
-**FALSE. Skewness would be a factor if the sample set were smaller. With a sample size of 436 or specifically 30 $\ge$ n where n=436 we can consider the results of this sample and ignore that it is right skewed**
+**FALSE. Skewness would be a factor if the sample set were smaller. With a sample size of 436 or specifically 30 $\ge$ n where n=436 we can consider the results of this sample and ignore that it is right skewed.**
 
 ### (c)
 
 95% of random samples have a sample mean between $80.31 and $89.11.\newline
-**FALSE. The confidence interval addresses the population not sample mean**\newline
+**FALSE. The confidence interval addresses the population not sample mean.**\newline
 
 ### (d)
 
 We are 95% confident that the average spending of all American adults is between $80.31 and $89.11.\newline
-**True. This is both the definition and purpose of a confidence interval of 95%**\newline
+**True. This is both the definition and purpose of a confidence interval of 95%.**\newline
 
 ### (e)
 
 A 90% confidence interval would be narrower than the 95% confidence interval since we don't need to be as sure about our estimate.\newline
-**True. Confidence intervals become narrower as the confidence level decreases**\newline
+**True. Confidence intervals become narrower as the confidence level decreases.**\newline
 
 ### (f)
 
@@ -120,7 +120,7 @@ In order to decrease the margin of error of a 95% confidence interval to a third
 
 The margin of error is 4.4.
 
-**Margin of error can be calculated by subtracting the upper and lower confidence intervals and dividing by 2. The calculation verifies 4.4 is true**
+**Margin of error can be calculated by subtracting the upper and lower confidence intervals and dividing by 2. The calculation verifies 4.4 is true.**
 
 ```{r, echo=FALSE}
 (89.11-80.31)/2
@@ -134,7 +134,7 @@ The margin of error is 4.4.
 
 \clearpage
 
-## Gifted children, Part I.
+## Gifted children, Part I
 
 Researchers investigating characteristics of gifted children collected data from schools in a large city on a random sample of thirty-six children who were identified as gifted children soon after they reached the age of four. The following histogram shows the distribution of the ages (in months) at which these children first counted to 10 successfully. Also provided are some sample statistics.
 
@@ -160,7 +160,7 @@ max & 39
 ### (a)
 
 Are conditions for inference satisfied?\newline
-**Random sample with n $\ge$ 30 or 36 $\ge$ 30, each child is independent of each other, data is not heavily skewed, so yes conditions for inference is satisfied**
+**Random sample with n $\ge$ 30 or 36 $\ge$ 30, each child is independent of each other, data is not heavily skewed, so yes conditions for inference is satisfied.**
 
 ### (b)
 
@@ -170,15 +170,15 @@ Suppose you read online that children first count to 10 successfully when they a
 *$H_A$:* **Mean does not equal 32 months**\newline
 *Conditions:* **Reject if p-value is less that 10%**\newline
 
-**Z-score equals:**
+
 ```{r,echo=FALSE}
 #Z-score
-(30.69-32)/(4.31/sqrt(36))
+paste0("Z-score equals: ",(30.69-32)/(4.31/sqrt(36)))
 ```
-**P-value equals:**
+
 ```{r, echo=FALSE}
 #p-value
-pnorm(-1.823666)
+paste0("P-value equals: ",pnorm(-1.823666))
 ```
 
 
@@ -193,13 +193,13 @@ Interpret the p-value in context of the hypothesis test and the data.\newline
 Calculate a 90% confidence interval for the average age at which gifted children first count to 10 successfully.\newline
 **Z-score of 90% confidence is 1.645**\newline
 **intervals = $\frac{30.69 \pm 1.645 *4.31}{\sqrt(36)}$**\newline
-**upper interval is:**
+
 ```{r, echo=FALSE}
-30.69+1.64*4.31/sqrt(36)
+paste0("upper interval is:",30.69+1.64*4.31/sqrt(36))
 ```
-**lower interval is:**
+
 ```{r, echo=FALSE}
-30.69-1.64*4.31/sqrt(36)
+paste0("lower interval is:",30.69-1.64*4.31/sqrt(36))
 ```
 
 
@@ -216,7 +216,7 @@ Do your results from the hypothesis test and the confidence interval agree? Expl
 
 \clearpage
 
-## Gifted children, Part II.
+## Gifted children, Part II
 
 Exercise above describes a study on gifted children. In this study, along with variables on the children, the researchers also collected data on the mother's and father's IQ of the 36 randomly sampled gifted children. The histogram below shows the distribution of mother's IQ. Also provided are some sample statistics.
 
@@ -269,7 +269,7 @@ paste0("Upper CI: ",118.2 + 1.645*(6.5/6))
 ### (c)
 
 Do your results from the hypothesis test and the confidence interval agree? Explain.\newline
-**100 does not reside in the intervals so they do not contradict each other**
+**100 does not reside in the intervals so they do not contradict each other.**
 
 
 
@@ -278,7 +278,7 @@ Do your results from the hypothesis test and the confidence interval agree? Expl
 
 \clearpage
 
-## CLT.
+## CLT
 
 Define the term "sampling distribution" of the mean, and describe how the shape, center, and spread of the sampling distribution of the mean change as sample size increases.\newline
 **Sampling distribution of the mean is the distribution of the mean from various samples (say size *n*) out of a population. Symmetry, median and mean come closer to a normal distribution as you increase size *n*.**
@@ -290,7 +290,7 @@ Define the term "sampling distribution" of the mean, and describe how the shape,
 
 \clearpage
 
-## CFLBs.
+## CFLB
 
 A manufacturer of compact fluorescent light bulbs advertises that the distribution of the lifespans of these light bulbs is nearly normal with a mean of 9,000 hours and a standard deviation of 1,000 hours.
 
@@ -322,7 +322,9 @@ Describe the distribution of the mean lifespan of 15 light bulbs.\newline
 **Sample size is too small and it is skewing the data as seen by the histogram.This data should be *'nearly'* normal as per the description, but the size makes it difficult to verify that.**
 
 ```{r quick-bulb-hist-plot,echo=FALSE}
-bulbs <- rnorm(15 ,mean = 9000, sd = 1000)
+mean_CFLB<-9000
+sd_CFLB<-1000
+bulbs <- rnorm(15 ,mean = mean_CFLB, sd = sd_CFLB)
 summary(bulbs)
 hist(bulbs)
 ```
@@ -336,17 +338,25 @@ What is the probability that the mean lifespan of 15 randomly chosen light bulbs
 **P-value:**
 ```{r, echo=FALSE}
 #Z-score
-paste0("Probability equals to ",pnorm((10500-9000)/(1000/sqrt(15)))," so basically 0")
+paste0("Probability equals to ",pnorm((10500 - mean_CFLB)/(sd_CFLB/sqrt(15)))," so basically 0% chance")
 ```
-
+\clearpage
 
 ### (d)
 
 Sketch the two distributions (population and sampling) on the same scale.
 
+```{r, echo=FALSE}
+x <- seq(5000,13000,length=1000)
+plot(x,dnorm(x,mean=mean_CFLB,sd=sd_CFLB),type = "l", ylab = "Probability")
+x <- seq(8000,10000,length=200)
+curve(dnorm(x,mean_CFLB, 258.2),add=TRUE,lty=2,col="red")
+```
+
 ### (e)
 
-Could you estimate the probabilities from parts (a) and (c) if the lifespans of light bulbs had a skewed distribution?
+Could you estimate the probabilities from parts (a) and (c) if the lifespans of light bulbs had a skewed distribution?\newline
+**For parts (a) and (c) without a nearly normal distribution, we cannot make estimates and (c) specifically needs a larger sample size.**
 
 
 
