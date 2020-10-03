@@ -61,7 +61,7 @@ P(FL) = Probability of that the American speaks a Foreign Language = 20.7%\newli
 (b) Draw a Venn diagram summarizing the variables and their associated probabilities.
 
 
-```{r}
+```{r, echo=FALSE}
 # storing vectors
 # ??venn.diagram
 # Based on 'Draw a Venn Diagram with Two Sets' resource
