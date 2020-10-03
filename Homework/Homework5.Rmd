@@ -1,6 +1,6 @@
 ---
 title: "Chapter 5 - Foundations for Inference"
-author: ""
+author: "Gabriel Campos"
 output:
     pdf_document:
         extra_dependencies: ["geometry", "multicol", "multirow"]
@@ -8,22 +8,65 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library('DATA606')
+library(tidyverse)
+library(openintro)
+library(dplyr)
 ```
 
-**Heights of adults.** (7.7, p. 260) Researchers studying anthropometry collected body girth measurements and skeletal diameter measurements, as well as age, weight, height and gender, for 507 physically active individuals. The histogram below shows the sample distribution of heights in centimeters.
+## Heights of adults.
+
+(7.7, p. 260) Researchers studying anthropometry collected body girth measurements and skeletal diameter measurements, as well as age, weight, height and gender, for 507 physically active individuals. The histogram below shows the sample distribution of heights in centimeters.
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=10, fig.height=3}
-library(openintro)
+
 data(bdims)
 par(mar=c(3.7,2.5,0.5,0.5), las=1, mgp=c(2.5,0.7,0), cex.lab = 1.5)
 histPlot(bdims$hgt, col = COL[1], xlab = "Height", ylab = "")
 ```
 
-(a) What is the point estimate for the average height of active individuals? What about the median?
-(b) What is the point estimate for the standard deviation of the heights of active individuals? What about the IQR?
-(c) Is a person who is 1m 80cm (180 cm) tall considered unusually tall? And is a person who is 1m 55cm (155cm) considered unusually short? Explain your reasoning.
-(d) The researchers take another random sample of physically active individuals. Would you expect the mean and the standard deviation of this new sample to be the ones given above? Explain your reasoning.
-(e) The sample means obtained are point estimates for the mean height of all active individuals, if the sample of individuals is equivalent to a simple random sample. What measure do we use to quantify the variability of such an estimate (Hint: recall that $SD_x = \frac{\sigma}{\sqrt{n}}$)? Compute this quantity using the data from the original sample under the condition that the data are a simple random sample.
+### (a)
+
+What is the point estimate for the average height of active individuals? What about the median?\newline
+**Point estimates for *mean height*= 171.1 and *median height*=170.3**
+```{r, echo=FALSE}
+#??summary
+summary(bdims$hgt)
+```
+
+### (b)
+
+What is the point estimate for the standard deviation of the heights of active individuals? What about the IQR?\newline
+**Point estimate for *standard deviation* = 9.407205 and for *IQR* = 14**
+```{r, echo=FALSE}
+sd(bdims$hgt)
+IQR(bdims$hgt)
+```
+
+### (c)
+
+Is a person who is 1m 80cm (180 cm) tall considered unusually tall? And is a person who is 1m 55cm (155cm) considered unusually short? Explain your reasoning.\newline
+**The range within 1 standard deviation of the mean is 161.6928 through 180.5072, therefore 180 is not unusually tall considering it is within that range. However 155cm, which is outside of 1 standard deviation from the mean can be considered unusually short.**
+```{r, include=FALSE}
+171.1+9.407205
+171.1-9.407205
+```
+
+### (d)
+
+The researchers take another random sample of physically active individuals. Would you expect the mean and the standard deviation of this new sample to be the ones given above? Explain your reasoning.\newline
+**The data collected showed the sample is not exactly normally distributed but nearly. This is supported, when noting the mean and median are not equivalent. Considering this, I would NOT expect the mean and standard deviation of the new sample to be identical, but it would be relatively close**\newline
+
+### (e)
+
+The sample means obtained are point estimates for the mean height of all active individuals, if the sample of individuals is equivalent to a simple random sample. What measure do we use to quantify the variability of such an estimate (Hint: recall that $SD_x = \frac{\sigma}{\sqrt{n}}$)? Compute this quantity using the data from the original sample under the condition that the data are a simple random sample.\newline
+**The measure to quantify the variability is Standard Error. SE is represented by $SD_x = \frac{\sigma}{\sqrt{n}}$) where**\newline 
+**$\sigma$ = 9.407205 and n = 507** \newline
+**ANSWER:**
+```{r, echo=FALSE}
+sd(bdims$hgt/sqrt(507))
+```
+
 
 
 
@@ -32,23 +75,56 @@ histPlot(bdims$hgt, col = COL[1], xlab = "Height", ylab = "")
 
 \clearpage
 
-**Thanksgiving spending, Part I.** The 2009 holiday retail season, which kicked off on November 27, 2009 (the day after Thanksgiving), had been marked by somewhat lower self-reported consumer spending than was seen during the comparable period in 2008. To get an estimate of consumer spending, 436 randomly sampled American adults were surveyed. Daily consumer spending for the six-day period after Thanksgiving, spanning the Black Friday weekend and Cyber Monday, averaged $84.71. A 95% confidence interval based on this sample is ($80.31, $89.11). Determine whether the following statements are true or false, and explain your reasoning.
+## Thanksgiving spending, Part I.
+
+The 2009 holiday retail season, which kicked off on November 27, 2009 (the day after Thanksgiving), had been marked by somewhat lower self-reported consumer spending than was seen during the comparable period in 2008. To get an estimate of consumer spending, 436 randomly sampled American adults were surveyed. Daily consumer spending for the six-day period after Thanksgiving, spanning the Black Friday weekend and Cyber Monday, averaged $84.71. A 95% confidence interval based on this sample is ($80.31, $89.11). Determine whether the following statements are true or false, and explain your reasoning.
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=10, fig.height=3}
 library(openintro)
-data(tgSpending)
+data(thanksgiving_spend)
 par(mar=c(3.7,2.2,0.5,0.5), las=1, mgp=c(2.5,0.7,0), cex.lab = 1.5)
-histPlot(tgSpending$spending, col = COL[1], xlab = "Spending", ylab = "")
+histPlot(thanksgiving_spend$spending, col = COL[1], xlab = "Spending", ylab = "")
 ```
 
-(a) We are 95% confident that the average spending of these 436 American adults is between $80.31 and $89.11.
-(b) This confidence interval is not valid since the distribution of spending in the sample is right skewed.
-(c) 95% of random samples have a sample mean between $80.31 and $89.11.
-(d) We are 95% confident that the average spending of all American adults is between $80.31 and $89.11.
-(e) A 90% confidence interval would be narrower than the 95% confidence interval since we don't need to be as sure about our estimate.
-(f) In order to decrease the margin of error of a 95% confidence interval to a third of what it is now, we would need to use a sample 3 times larger.
-(g) The margin of error is 4.4.
+### (a)
 
+We are 95% confident that the average spending of these 436 American adults is between $80.31 and $89.11.\newline
+**FALSE. The sample mean is always in the confidence interval. We are 95% confident that the average spending of the POPULATION falls between $80.31 and $89.11** \newline
+
+### (b)
+
+This confidence interval is not valid since the distribution of spending in the sample is right skewed.\newline
+**FALSE. Skewness would be a factor if the sample set were smaller. With a sample size of 436 or specifically 30 $\ge$ n where n=436 we can consider the results of this sample and ignore that it is right skewed**
+
+### (c)
+
+95% of random samples have a sample mean between $80.31 and $89.11.\newline
+**FALSE. The confidence interval addresses the population not sample mean**\newline
+
+### (d)
+
+We are 95% confident that the average spending of all American adults is between $80.31 and $89.11.\newline
+**True. This is both the definition and purpose of a confidence interval of 95%**\newline
+
+### (e)
+
+A 90% confidence interval would be narrower than the 95% confidence interval since we don't need to be as sure about our estimate.\newline
+**True. Confidence intervals become narrower as the confidence level decreases**\newline
+
+### (f)
+
+In order to decrease the margin of error of a 95% confidence interval to a third of what it is now, we would need to use a sample 3 times larger.\newline
+**False. Standard Error formula is $\frac{\sigma}{\sqrt{n}}$. In order to reduce the margin error to a third we would need n= n x 3^2^ or just n to be 9 times greater.**\newline
+
+### (g)
+
+The margin of error is 4.4.
+
+**Margin of error can be calculated by subtracting the upper and lower confidence intervals and dividing by 2. The calculation verifies 4.4 is true**
+
+```{r, echo=FALSE}
+(89.11-80.31)/2
+```
 
 
 
@@ -58,7 +134,9 @@ histPlot(tgSpending$spending, col = COL[1], xlab = "Spending", ylab = "")
 
 \clearpage
 
-**Gifted children, Part I.** Researchers investigating characteristics of gifted children col- lected data from schools in a large city on a random sample of thirty-six children who were identified as gifted children soon after they reached the age of four. The following histogram shows the dis- tribution of the ages (in months) at which these children first counted to 10 successfully. Also provided are some sample statistics.
+## Gifted children, Part I.
+
+Researchers investigating characteristics of gifted children collected data from schools in a large city on a random sample of thirty-six children who were identified as gifted children soon after they reached the age of four. The following histogram shows the distribution of the ages (in months) at which these children first counted to 10 successfully. Also provided are some sample statistics.
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=10, fig.height=3}
 library(openintro)
@@ -79,11 +157,56 @@ sd  & 4.31 \\
 max & 39 
 \end{tabular}
 
-(a) Are conditions for inference satisfied?
-(b) Suppose you read online that children first count to 10 successfully when they are 32 months old, on average. Perform a hypothesis test to evaluate if these data provide convincing evidence that the average age at which gifted children fist count to 10 successfully is less than the general average of 32 months. Use a significance level of 0.10.
-(c) Interpret the p-value in context of the hypothesis test and the data.
-(d) Calculate a 90% confidence interval for the average age at which gifted children first count to 10 successfully.
-(e) Do your results from the hypothesis test and the confidence interval agree? Explain.
+### (a)
+
+Are conditions for inference satisfied?\newline
+**Random sample with n $\ge$ 30 or 36 $\ge$ 30, each child is independent of each other, data is not heavily skewed, so yes conditions for inference is satisfied**
+
+### (b)
+
+Suppose you read online that children first count to 10 successfully when they are 32 months old, on average. Perform a hypothesis test to evaluate if these data provide convincing evidence that the average age at which gifted children fist count to 10 successfully is less than the general average of 32 months. Use a significance level of 0.10.
+
+*$H_0$:* **32 months to count to 10 is the mean age**\newline
+*$H_A$:* **Mean does not equal 32 months**\newline
+*Conditions:* **Reject if p-value is less that 10%**\newline
+
+**Z-score equals:**
+```{r,echo=FALSE}
+#Z-score
+(30.69-32)/(4.31/sqrt(36))
+```
+**P-value equals:**
+```{r, echo=FALSE}
+#p-value
+pnorm(-1.823666)
+```
+
+
+### (c)
+
+Interpret the p-value in context of the hypothesis test and the data.\newline
+**P-value = 0.03410129 < .10 so we can reject the null hypothesis**\newline
+**The mean age for gifted children to learn to count to 10 is not 32 months**\newline
+
+### (d)
+
+Calculate a 90% confidence interval for the average age at which gifted children first count to 10 successfully.\newline
+**Z-score of 90% confidence is 1.645**\newline
+**intervals = $\frac{30.69 \pm 1.645 *4.31}{\sqrt(36)}$**\newline
+**upper interval is:**
+```{r, echo=FALSE}
+30.69+1.64*4.31/sqrt(36)
+```
+**lower interval is:**
+```{r, echo=FALSE}
+30.69-1.64*4.31/sqrt(36)
+```
+
+
+### (e)
+
+Do your results from the hypothesis test and the confidence interval agree? Explain.\newline
+**Yes. 32 is outside of our CI, which supports the rejection of our null hypothesis**
 
 
 
@@ -93,7 +216,9 @@ max & 39
 
 \clearpage
 
-**Gifted children, Part II.** Exercise above describes a study on gifted children. In this study, along with variables on the children, the researchers also collected data on the mother's and father's IQ of the 36 randomly sampled gifted children. The histogram below shows the distribution of mother's IQ. Also provided are some sample statistics.
+## Gifted children, Part II.
+
+Exercise above describes a study on gifted children. In this study, along with variables on the children, the researchers also collected data on the mother's and father's IQ of the 36 randomly sampled gifted children. The histogram below shows the distribution of mother's IQ. Also provided are some sample statistics.
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=10, fig.height=3}
 library(openintro)
@@ -113,9 +238,116 @@ sd  & 6.5 \\
 max & 131 
 \end{tabular}
 
-(a) Performahypothesistesttoevaluateifthesedataprovideconvincingevidencethattheaverage IQ of mothers of gifted children is different than the average IQ for the population at large, which is 100. Use a significance level of 0.10.
-(b) Calculate a 90% confidence interval for the average IQ of mothers of gifted children.
-(c) Do your results from the hypothesis test and the confidence interval agree? Explain.
+### (a)
+
+Perform a hypothesis test to evaluate if this data provides convincing evidence that the average IQ of mothers of gifted children is different than the average IQ for the population at large, which is 100. Use a significance level of 0.10.
+
+*$H_0$:* **mean IQ = 100 IQ**\newline
+*$H_A$:* **mean IQ $\neq$ 100 IQ** \newline
+*Conditions:* **Reject if p-value is less that 10%**\newline
+**Z-score = $\frac{118.2-100}{SE}$**\newline
+**p-value = 1-pnorm(Z-score)**
+```{r, echo=FALSE}
+paste0("We should reject hypothesis since the p-value is less than ",1-pnorm((118.2-100)/(6.5/sqrt(36))))
+
+```
+
+
+### (b)
+
+Calculate a 90% confidence interval for the average IQ of mothers of gifted children.\newline
+
+```{r, echo=FALSE}
+paste("Lower CI: ",118.2 - 1.645*(6.5/6))
+```
+
+```{r, echo=FALSE}
+paste0("Upper CI: ",118.2 + 1.645*(6.5/6))
+```
+
+
+### (c)
+
+Do your results from the hypothesis test and the confidence interval agree? Explain.\newline
+**100 does not reside in the intervals so they do not contradict each other**
+
+
+
+
+--------------------------------------------------------------------------------
+
+\clearpage
+
+## CLT.
+
+Define the term "sampling distribution" of the mean, and describe how the shape, center, and spread of the sampling distribution of the mean change as sample size increases.\newline
+**Sampling distribution of the mean is the distribution of the mean from various samples (say size *n*) out of a population. Symmetry, median and mean come closer to a normal distribution as you increase size *n*.**
+
+
+
+
+--------------------------------------------------------------------------------
+
+\clearpage
+
+## CFLBs.
+
+A manufacturer of compact fluorescent light bulbs advertises that the distribution of the lifespans of these light bulbs is nearly normal with a mean of 9,000 hours and a standard deviation of 1,000 hours.
+
+### (a)
+
+What is the probability that a randomly chosen light bulb lasts more than 10,500 hours?\newline
+```{r echo=FALSE}
+paste0("Z-score: ",(10500-9000)/1000)
+```
+```{r, echo=FALSE}
+paste0("Probability equals to ",round((1-pnorm(1.5))*100,digits = 2),"%")
+```
+*Added the normalPlot to verify further*\newline
+\
+
+```{r, echo=FALSE}
+# use the DATA606::normalPlot function
+# $Z < -1.5$
+#pnorm(1.5)
+normalPlot(bounds = c(1.5,Inf))
+
+```
+
+\clearpage
+
+### (b)
+
+Describe the distribution of the mean lifespan of 15 light bulbs.\newline
+**Sample size is too small and it is skewing the data as seen by the histogram.This data should be *'nearly'* normal as per the description, but the size makes it difficult to verify that.**
+
+```{r quick-bulb-hist-plot,echo=FALSE}
+bulbs <- rnorm(15 ,mean = 9000, sd = 1000)
+summary(bulbs)
+hist(bulbs)
+```
+
+
+
+### (c)
+
+What is the probability that the mean lifespan of 15 randomly chosen light bulbs is more than 10,500 hours?\newline
+**Z-score=$\frac{10,500 - 9,000}{\frac{1000}{sqrt(15)}}$**
+**P-value:**
+```{r, echo=FALSE}
+#Z-score
+paste0("Probability equals to ",pnorm((10500-9000)/(1000/sqrt(15)))," so basically 0")
+```
+
+
+### (d)
+
+Sketch the two distributions (population and sampling) on the same scale.
+
+### (e)
+
+Could you estimate the probabilities from parts (a) and (c) if the lifespans of light bulbs had a skewed distribution?
+
 
 
 
@@ -125,35 +357,10 @@ max & 131
 
 \clearpage
 
-**CLT.** Define the term "sampling distribution" of the mean, and describe how the shape, center, and spread of the sampling distribution of the mean change as sample size increases.
+## Same observation, different sample size.
 
-
-
-
-
---------------------------------------------------------------------------------
-
-\clearpage
-
-**CFLBs.** A manufacturer of compact fluorescent light bulbs advertises that the distribution of the lifespans of these light bulbs is nearly normal with a mean of 9,000 hours and a standard deviation of 1,000 hours.
-
-(a) What is the probability that a randomly chosen light bulb lasts more than 10,500 hours?
-(b) Describe the distribution of the mean lifespan of 15 light bulbs.
-(c) What is the probability that the mean lifespan of 15 randomly chosen light bulbs is more than 10,500 hours?
-(d) Sketch the two distributions (population and sampling) on the same scale.
-(e) Could you estimate the probabilities from parts (a) and (c) if the lifespans of light bulbs had a skewed distribution?
-
-
-
-
-
-
---------------------------------------------------------------------------------
-
-\clearpage
-
-**Same observation, different sample size.** Suppose you conduct a hypothesis test based on a sample where the sample size is n = 50, and arrive at a p-value of 0.08. You then refer back to your notes and discover that you made a careless mistake, the sample size should have been n = 500. Will your p-value increase, decrease, or stay the same? Explain.
-
+Suppose you conduct a hypothesis test based on a sample where the sample size is n = 50, and arrive at a p-value of 0.08. You then refer back to your notes and discover that you made a careless mistake, the sample size should have been n = 500. Will your p-value increase, decrease, or stay the same? Explain.\newline
+**The impact *n* has on the calculation for SE $\frac{sd}{\sqrt(n)}$, means Z-score $\frac{x-mean}{SE}$ is impacted because of the standard error. With that said increasing the increase of n from 50 to 500 will increase the Z-score and therefore increase the p-value.**
 
 
 
