@@ -63,9 +63,9 @@ count(yrbss,"20-29")
 count(yrbss,"30")
 ```
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, include=FALSE}
 Q1<-yrbss$text_while_driving_30d
-
+Q1
 ```
 
 ```{r ggplot_yrbss_count,echo=FALSE, include=TRUE}
