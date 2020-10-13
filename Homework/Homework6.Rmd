@@ -10,12 +10,132 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-**2010 Healthcare Law.** (6.48, p. 248) On June 28, 2012 the U.S. Supreme Court upheld the much debated 2010 healthcare law, declaring it constitutional. A Gallup poll released the day after this decision indicates that 46% of 1,012 Americans agree with this decision. At a 95% confidence level, this sample has a 3% margin of error. Based on this information, determine if the following statements are true or false, and explain your reasoning.
+## 2010 Healthcare Law (6.48, p. 248) 
 
-(a) We are 95% confident that between 43% and 49% of Americans in this sample support the decision of the U.S. Supreme Court on the 2010 healthcare law.
-(b) We are 95% confident that between 43% and 49% of Americans support the decision of the U.S. Supreme Court on the 2010 healthcare law.
-(c) If we considered many random samples of 1,012 Americans, and we calculated the sample proportions of those who support the decision of the U.S. Supreme Court, 95% of those sample proportions will be between 43% and 49%.
-(d) The margin of error at a 90% confidence level would be higher than 3%.
+On June 28, 2012 the U.S. Supreme Court upheld the much debated 2010 healthcare law, declaring it constitutional. A Gallup poll released the day after this decision indicates that **46%** of **1,012 Americans** agree with this decision. At a **95% confidence level**, this sample has a **3% margin of error**. Based on this information, determine if the following statements are true or false, and explain your reasoning.
+\
+**$p$=.46 , $n$=1,012 , $Z-score$=1.96**\newline
+\
+**$SE$=$\sqrt(\frac{p(1-p)}{n})$ or $SE$=$\sqrt(\frac{.46(1-.46)}{1,012})$**\newline
+\
+**Critical Interval = $p \pm (Z \times SE)$ or Critical Interval = $.46 \pm (1.96 \times 0.016)$**\newline
+\newline
+\
+**Which equates to a CI of 0.4292933-0.4907067 or roughly 43%-49% ** 
+\
+
+```{r, echo=FALSE, include=FALSE}
+Q1.p=.46
+Q1.n=1012
+#Just trying to get in the habit of calculating the Z-Score of a confidence interval
+#.5/2
+Q1.z=qnorm(.95+.025)
+Q1.se= sqrt( (Q1.p*(1-Q1.p))/Q1.n )
+Q1.Lower_CI <- Q1.p - (Q1.z * Q1.se)
+Q1.Upper_CI <- Q1.p + (Q1.z * Q1.se)
+Q1.p
+Q1.n
+Q1.z
+Q1.se
+Q1.Lower_CI
+Q1.Upper_CI
+
+```
+
+
+
+### (a)
+
+We are 95% confident that between 43% and 49% of Americans in this sample support the decision of the U.S. Supreme Court on the 2010 healthcare law.\newline
+**ANSWER: FALSE.** The Critical Intervals of 43%-49% are a reflection of the **POPULATION** but **NOT** the sample.
+
+### (b)
+
+We are 95% confident that between 43% and 49% of Americans support the decision of the U.S. Supreme Court on the 2010 healthcare law.\newline
+**ANSWER: TRUE.** This defines the meaning of CI.
+
+### (c)
+
+If we considered many random samples of 1,012 Americans, and we calculated the sample proportions of those who support the decision of the U.S. Supreme Court, 95% of those sample proportions will be between 43% and 49%.\newline
+**ANSWER: FALSE** Only because the CI again reflects the population proportion which is unknown and not the sample proportion so this assumption cannot be made.
+
+### (d)
+
+The margin of error at a 90% confidence level would be higher than 3%.\newline
+**ANSWER:FALSE** Confidence levels and margin of error have a **DIRECT RELATIONSHIP**, so as confidence levels decrease, so does the margin of error.
+
+
+
+
+--------------------------------------------------------------------------------
+
+\clearpage
+
+## Legalization of marijuana, Part I (6.10, p. 216)
+
+The 2010 General Social Survey asked 1,259 US residents: "Do you think the use of marijuana should be made legal, or not" 48% of the respondents said it should be made legal.
+\
+**$p$=.48 , $n$=1,259 , $Z-score_{(b)}$=1.96**\newline
+\
+**$SE$=$\sqrt(\frac{p(1-p)}{n})$ or $SE$=$\sqrt(\frac{.48(1-.48)}{1,259})$**\newline
+\
+**Critical Interval = $p \pm (Z_{(b)} \times SE)$ or Critical Interval = $.48 \pm (1.96 \times 0.01408022)$**\newline
+\newline
+\
+**Which equates to a CI of 0.4524033 - 0.5075967 or roughly 45%-51% ** 
+\
+
+```{r, echo=FALSE, include=FALSE}
+Q2.p=.48
+Q2.n=1259
+Q2.np=Q2.n*Q2.p
+Q2.n_minus_p=Q2.n*(1-Q2.p)
+#Just trying to get in the habit of calculating the Z-Score of a confidence interval
+#.5/2
+Q2.z=qnorm(.95+.025)
+Q2.se= sqrt( (Q2.p*(1-Q2.p))/Q2.n )
+Q2.Lower_CI <- Q2.p - (Q2.z * Q2.se)
+Q2.Upper_CI <- Q2.p + (Q2.z * Q2.se)
+Q2.p
+Q2.n
+Q2.np
+Q2.n_minus_p
+Q2.z
+Q2.se
+Q2.Lower_CI
+Q2.Upper_CI
+
+```
+
+
+### (a)
+
+Is 48% a sample statistic or a population parameter? Explain.\newline
+**ANSWER: Sample Statistic**
+
+### (b)
+
+Construct a 95% confidence interval for the proportion of US residents who think marijuana should be made legal, and interpret it in the context of the data.\newline
+**ANSWER: $CI$ = 0.4524033 - 0.5075967 or roughly 45%-51%**
+
+### (c)
+
+A critic points out that this 95% confidence interval is only accurate if the statistic follows a normal distribution, or if the normal model is a good approximation. Is this true for these data? Explain.\newline
+**ANSWER: NO. Both INDEPENCE and SUCCESS-FAILURE conditions are met, therefore we can treat the distribution as nearly normal.**
+
+**Independence.** There are *n = 1000* observations for each sample proportion $\hat{p}$, and each of those
+observations are independent draws. The most common way for observations to be considered independent is if they are from a simple random sample.\newline
+**Success-failure condition.** We can confirm the sample size is sufficiently large by checking the
+success-failure condition and confirming the two calculated values are greater than 10:\newline
+**np** = $1,259 \times 0.48$ = $604.32 \ge 10$ **n(1-p)**= $1,259\times (1-0.48)$ = $654.68 \ge 10$
+
+
+
+### (d)
+
+A news piece on this survey's findings states, "Majority of Americans think marijuana should be legalized." Based on your confidence interval, is this news piece's statement justified?\newline
+
+**ANSWER:NO.** I would say the critical intervals fall just short of in favor, with the Upper CI just etching over 50%. The majority of the range staying below implying its close but **MOST** likely not representative of the **MAJORITY** of the true population. 
 
 
 
@@ -25,22 +145,16 @@ knitr::opts_chunk$set(echo = TRUE)
 
 \clearpage
 
-**Legalization of marijuana, Part I.** (6.10, p. 216) The 2010 General Social Survey asked 1,259 US residents: "Do you think the use of marijuana should be made legal, or not" 48% of the respondents said it should be made legal.
+## Legalize Marijuana, Part II. (6.16, p. 216)
 
-(a) Is 48% a sample statistic or a population parameter? Explain.
-(b) Construct a 95% confidence interval for the proportion of US residents who think marijuana should be made legal, and interpret it in the context of the data.
-(c) A critic points out that this 95% confidence interval is only accurate if the statistic follows a normal distribution, or if the normal model is a good approximation. Is this true for these data? Explain.
-(d) A news piece on this survey's findings states, "Majority of Americans think marijuana should be legalized." Based on your confidence interval, is this news piece's statement justified?
+As discussed in Exercise above, the 2010 General Social Survey reported a sample where about 48% of US residents thought marijuana should be made legal. If we wanted to limit the margin of error of a 95% confidence interval to 2%, about how many Americans would we need to survey?\newline
+**ME = 2% or 0.02**\newline
+**Solving for $n$ in $n$= $Z^2 \times \frac{p(1-p)}{ME^2} < n$ or $1.96^2 \times \frac{0.48(1-0.48)}{0.02^2} < n$**\newline
+**$n$= 2397.158**
 
-
-
-
-
---------------------------------------------------------------------------------
-
-\clearpage
-
-**Legalize Marijuana, Part II.** (6.16, p. 216) As discussed in Exercise above, the 2010 General Social Survey reported a sample where about 48% of US residents thought marijuana should be made legal. If we wanted to limit the margin of error of a 95% confidence interval to 2%, about how many Americans would we need to survey?
+```{r, include=FALSE}
+((1.96 ^ 2) * (0.48 * 0.52) / (0.02^2))
+```
 
 
 
@@ -51,9 +165,42 @@ knitr::opts_chunk$set(echo = TRUE)
 
 \clearpage
 
-**Sleep deprivation, CA vs. OR, Part I.** (6.22, p. 226) According to a report on sleep deprivation by the Centers for Disease Control and Prevention, the proportion of California residents who reported insuffient rest or sleep during each of the preceding 30 days is 8.0%, while this proportion is 8.8% for Oregon residents. These data are based on simple random samples of 11,545 California and 4,691 Oregon residents. Calculate a 95% confidence interval for the difference between the proportions of Californians and Oregonians who are sleep deprived and interpret it in context of the data.
+## Sleep deprivation, CA vs. OR, Part I. (6.22, p. 226)
 
+According to a report on sleep deprivation by the Centers for Disease Control and Prevention, the proportion of California residents who reported insuffient rest or sleep during each of the preceding 30 days is **8.0%**, while this proportion is **8.8%** for Oregon residents. These data are based on simple random samples of **11,545** California and **4,691** Oregon residents. Calculate a 95% confidence interval for the difference between the proportions of Californians and Oregonians who are sleep deprived and interpret it in context of the data.\newline
 
+**$n_{cali}$=11,545 , $n_{Oregon}$=4,691 , $p_{cali}$=.08 , $p_{oregon}$=.088 , $p_{combined}$=.08-0.88 = -0.008**\newline
+
+**SE=$\sqrt(\frac{p_{cali}(1-p_{cali})}{n_{cali}} + \frac{p_{oregon}(1-p_{oregon}}{n_{oregon}})$ or SE=$\sqrt(\frac{.08(1-.08)}{11,545} + \frac{.088(1-.088)}{4,691})$**\newline
+\
+**ME= $Z \times SE$ or $1.96 \times 0.009498128$**\newline
+\
+**Finally $CI$=$p_{combine} \pm ME$ which equals to:**\newline
+**ANSWER**
+
+```{r, echo=FALSE}
+Cali.n=11545
+Ore.n=4691
+Cali.p=.08
+Ore.p=.088
+#Cannot do individually
+#Cali.se= sqrt( (Cali.p*(1-Cali.p))/Cali.n )
+#Ore.se= sqrt( (Ore.p*(1-Ore.p))/Ore.n )
+#Find standard error with square root of combined value
+Q4.se= sqrt( ((Cali.p*(1-Cali.p))/Cali.n)  +  ((Ore.p*(1-Ore.p))/Ore.n)  )
+#Find combined mean
+Q4.p=.08-.088
+#Q4.p
+#Find Margin of error
+Q4.me=1.96*(Q4.se)
+#Q4.me
+Q4.z=1.96
+#Use margin of error to find upper and lower limit
+Q4.lower=Q4.p-Q4.me
+Q4.upper=Q4.p+Q4.me
+Q4.lower
+Q4.upper
+```
 
 
 
@@ -62,7 +209,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 \clearpage
 
-**Barking deer.** (6.34, p. 239) Microhabitat factors associated with forage and bed sites of barking deer in Hainan Island, China were examined from 2001 to 2002. In this region woods make up 4.8% of the land, cultivated grass plot makes up 14.7% and deciduous forests makes up 39.6%. Of the 426 sites where the deer forage, 4 were categorized as woods, 16 as cultivated grassplot, and 61 as deciduous forests. The table below summarizes these data.
+## Barking deer. (6.34, p. 239)
+
+Microhabitat factors associated with forage and bed sites of barking deer in Hainan Island, China were examined from 2001 to 2002. In this region woods make up **4.8%** of the land, cultivated grass plot makes up **14.7%** and deciduous forests makes up **39.6%**. Of the **426** sites where the deer forage, 4 were categorized as woods, 16 as cultivated grassplot, and 61 as deciduous forests. The table below summarizes these data.
 
 \begin{center}
 \begin{tabular}{c c c c c}
@@ -72,14 +221,60 @@ Woods	& Cultivated grassplot	& Deciduous forests	 & Other & Total \\
 \end{tabular}
 \end{center}
 
-(a) Write the hypotheses for testing if barking deer prefer to forage in certain habitats over others.
-(b) What type of test can we use to answer this research question?
-(c) Check if the assumptions and conditions required for this test
-are satisfied.
-(d) Do these data provide convincing evidence that barking deer pre-
-fer to forage in certain habitats over others? Conduct an appro- priate hypothesis test to answer this research question.
+### (a)
 
+Write the hypotheses for testing if barking deer prefer to forage in certain habitats over others.\newline
+**ANSWER:**\newline
+**$H_0$: Barking Deers do not prefer forage in certain habitats over others**\newline
+**$H_a$: Barking Deers show preference in habitats**
 
+### (b)
+
+What type of test can we use to answer this research question?\newline
+**ANSWER:**\newline
+**Chi-square test**
+
+### (c)
+
+Check if the assumptions and conditions required for this test
+are satisfied.\newline
+**ANSWER: All necessary conditions met (refer below)**\newline
+**Independence:** We assume yes since the forage and habitat are distinct.\newline
+**Sample size/distribution:** Expected cases $\ge$ 5.
+
+### (d)
+
+Do these data provide convincing evidence that barking deer prefer to forage in certain habitats over others? Conduct an appropriate hypothesis test to answer this research question.\newline
+**ANSWER: p-value of the data is small enough to support that deer favor certain habitats for foraging**\newline
+
+```{r, echo=FALSE}
+Q5.n=426
+Q5.habitats = c(4,16,61,345)
+paste0("n = 426 and Habitats = ")
+paste0(Q5.habitats)
+#1-(.048+.147+.396)
+Q5.regions = c(Q5.n*0.048,Q5.n*0.147,Q5.n*0.396,Q5.n*.409)
+Q5.chi.score<-(Q5.habitats-Q5.regions)^2/Q5.regions
+
+```
+\
+
+**$E(X)_{regions}$ = $n \times p_{region}$ or:**
+
+\
+```{r, echo=FALSE}
+Q5.regions
+```
+
+```{r, echo=FALSE}
+#Q5.chi.score
+paste("Chi Square is equal to",sum(Q5.chi.score))
+
+```
+
+```{r, echo=FALSE}
+paste0("p-value equals to ", pchisq(sum(Q5.chi.score),length(Q5.habitats)-1,lower.tail = FALSE))
+```
 
 
 --------------------------------------------------------------------------------
@@ -87,7 +282,9 @@ fer to forage in certain habitats over others? Conduct an appro- priate hypothes
 \clearpage
 
 
-**Coffee and Depression.** (6.50, p. 248) Researchers conducted a study investigating the relationship between caffeinated coffee consumption and risk of depression in women. They collected data on 50,739 women free of depression symptoms at the start of the study in the year 1996, and these women were followed through 2006. The researchers used questionnaires to collect data on caffeinated coffee consumption, asked each individual about physician-diagnosed depression, and also asked about the use of antidepressants. The table below shows the distribution of incidences of depression by amount of caffeinated coffee consumption.
+## Coffee and Depression. (6.50, p. 248)
+
+Researchers conducted a study investigating the relationship between caffeinated coffee consumption and risk of depression in women. They collected data on **50,739** women free of depression symptoms at the start of the study in the year 1996, and these women were followed through 2006. The researchers used questionnaires to collect data on caffeinated coffee consumption, asked each individual about physician-diagnosed depression, and also asked about the use of antidepressants. The table below shows the distribution of incidences of depression by amount of caffeinated coffee consumption.
 
 \small
 \begin{center}
@@ -106,13 +303,65 @@ fer to forage in certain habitats over others? Conduct an appro- priate hypothes
 \end{center}
 
 
-(a) What type of test is appropriate for evaluating if there is an association between coffee intake and depression?
-(b) Write the hypotheses for the test you identified in part (a).
-(c) Calculate the overall proportion of women who do and do not suffer from depression.
-(d) Identify the expected count for the highlighted cell, and calculate the contribution of this cell to the test statistic, i.e. ($Observed - Expected)^2 / Expected$).
-(e) The test statistic is $\chi^2=20.93$. What is the p-value?
-(f) What is the conclusion of the hypothesis test?
-(g) One of the authors of this study was quoted on the NYTimes as saying it was "too early to recommend that women load up on extra coffee" based on just this study. Do you agree with this statement? Explain your reasoning.
+### (a)
+
+What type of test is appropriate for evaluating if there is an association between coffee intake and depression?\newline
+**ANSWER: Chi Square test**
+
+### (b)
+
+Write the hypotheses for the test you identified in part (a).\newline
+\
+**$H_{0}$: No relationship between coffee and depression**\newline
+**$H_{a}$: Relationship between coffee and depression**
+
+### (c)
+
+Calculate the overall proportion of women who do and do not suffer from depression.
+
+**$Depressed_{women}$=2607 $NotDepressed_{women}$=48132 **
+```{r, echo=FALSE}
+Q6.yes=2607
+Q6.no=48132
+Q6.c=Q6.yes/Q6.no
+Q6.total=50739
+paste0("The overal proportion equals to ",Q6.c," or 5.14%")
+```
+
+
+### (d)
+
+Identify the expected count for the highlighted cell, and calculate the contribution of this cell to the test statistic, i.e. ($\frac{Observed - Expected)^2}{Expected}$).
+
+```{r, echo=FALSE}
+Q6.2cups<-6617
+Q6.ek<-(Q6.yes*Q6.2cups)/Q6.total
+Q6.d<-(373-Q6.ek)^2/Q6.ek
+paste0("Expected count is ",Q6.d)
+```
+
+
+### (e)
+
+The test statistic is $\chi^2=20.93$. What is the p-value?
+**Degrees of freedom $(rows-1)(columns-1)$ or $(5-1)(2-1)$ or just $4 \times 1$ = 4**\newline
+**ANSWER:**
+
+```{r,echo=FALSE}
+Q6.deg.free<-(5-1)*(2-1)
+paste0("When using 1-pchisq I find the p-value to be ", 1-pchisq(20.93,Q6.deg.free))
+```
+
+### (f)
+
+What is the conclusion of the hypothesis test?\newline
+**p-vlue < 0.05 $\therefore$ we reject the null hypothesis**
+
+### (g)
+
+One of the authors of this study was quoted on the NYTimes as saying it was "too early to recommend that women load up on extra coffee" based on just this study. Do you agree with this statement? Explain your reasoning.\newline
+
+**Agreed, more testing with other variables taken into account should be conducted**
 
 
 

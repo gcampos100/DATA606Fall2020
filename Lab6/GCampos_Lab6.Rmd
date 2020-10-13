@@ -115,6 +115,7 @@ wearers. Here, we will name the dataset `no_helmet`.
 ```{r no helmet}
 no_helmet <- yrbss %>%
   filter(helmet_12m == "never")
+count(no_helmet)
 ```
 
 Also, it may be easier to calculate the proportion if you create a new variable
@@ -157,18 +158,78 @@ proportion.
 ## Q3 & Q4
 
 ### 3.
-
+\
 	What is the margin of error for the estimate of the proportion of non-helmet 
     wearers that have texted while driving each day for the past 30 days based on 
-    this survey?
+    this survey?\newline
+    **ME = critical value x standard error of the point estimate**\newline
+    **For $SE_{\hat{p}}=\sqrt(\frac{p(1-p)}{n})$ and sample size=1000**\newline
+```{r mutate-conditions_for_mu_sd, include=FALSE}
+#str(no_helmet)
+no_helmet$val_text_ind<-as.factor(no_helmet$text_ind)
+no_helmet$val_text_ind<-ifelse(no_helmet$val_text_ind=="yes",1,0)
+#mean(no_helmet$val_text_in,na.rm = TRUE)
+```
+    
+```{r echo = FALSE}
+set.seed(2)
+Q3.sample<-sample(no_helmet$val_text_ind, size=1000)
+#sd(Q3.sample,na.rm = TRUE)
+Q3.se<-sd(Q3.sample,na.rm = TRUE)/sqrt(length(Q3.sample))
+Q3.mu<-mean(Q3.sample,na.rm = TRUE)
+#Q3.mu
+paste0("Our Critical value for a 95% confidence interval is 1.96")
+paste0("and the standard error for our sample is ",Q3.se)
+paste0("making our ME = ",1.96*Q3.se)
+```
+    
 
 ### 4.
-
+\
 	Using the `infer` package, calculate confidence intervals for two other 
     categorical variables (you'll need to decide which level to call "success", 
     and report the associated margins of error. Interpet the interval in context 
     of the data. It may be helpful to create new data sets for each of the two 
     countries first, and then use these data sets to construct the confidence intervals.
+    
+    
+```{r Q4}
+hispanic_male <- yrbss %>%
+  filter(hispanic == "hispanic")
+count(hispanic_male)
+```
+
+```{r Q4-indicator-texting}
+hispanic_male <- hispanic_male %>%
+  mutate(gender_ind = ifelse(gender == "male", "yes", "no"))
+```
+
+```{r Q4-text-ci}
+hispanic_male %>%
+  specify(response = gender_ind, success = "yes") %>%
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "prop") %>%
+  get_ci(level = 0.95)
+```
+
+```{r Q4-mutate-conditions_for_mu_sd, include=FALSE}
+#str(no_helmet)
+hispanic_male$val_gender_ind<-as.factor(hispanic_male$gender_ind)
+hispanic_male$val_gender_ind<-ifelse(hispanic_male$val_gender_ind=="yes",1,0)
+#mean(no_helmet$val_text_in,na.rm = TRUE)
+```
+
+```{r echo = FALSE}
+set.seed(4)
+Q4.sample<-sample(hispanic_male$val_gender_ind, size=1000)
+#sd(Q3.sample,na.rm = TRUE)
+Q4.se<-sd(Q4.sample,na.rm = TRUE)/sqrt(length(Q4.sample))
+Q4.mu<-mean(Q4.sample,na.rm = TRUE)
+#Q4.mu
+paste0("Our Critical value for a 95% confidence interval is 1.96")
+paste0("and the standard error for our sample is ",Q4.se)
+paste0("making our ME = ",1.96*Q4.se)
+```
 
 ## How does the proportion affect the margin of error?
 
@@ -217,10 +278,16 @@ ggplot(data = dd, aes(x = p, y = me)) +
 ```
 
 ## Q5
-
+\
 	Describe the relationship between `p` and `me`. Include the margin of
     error vs. population proportion plot you constructed in your answer. For
     a given sample size, for which value of `p` is margin of error maximized?
+\
+**As shown in the plot above the margin of error maximizes when p=.05**\newline
+**the relationship between the p and me is inversley proportional as you**\newline
+**approach the extremes e.g. as p deviated from .5 proportion, ME decreases**\newline
+
+
 
 ## Success-failure condition
 
@@ -243,47 +310,107 @@ app to investigate how the shape, center, and spread of the distribution of
 $\hat{p}$ changes as $n$ and $p$ changes.
 
 ```{r sf-app, echo=FALSE, eval=FALSE}
-inputPanel(
-  numericInput("n", label = "Sample size:", value = 300),
-  
-  sliderInput("p", label = "Population proportion:",
-              min = 0, max = 1, value = 0.1, step = 0.01),
-  
-  numericInput("x_min", label = "Min for x-axis:", value = 0, min = 0, max = 1),
-  numericInput("x_max", label = "Max for x-axis:", value = 1, min = 0, max = 1)
-)
+#inputPanel(
+#  numericInput("n", label = "Sample size:", value = 300),
+#  
+#  sliderInput("p", label = "Population proportion:",
+#              min = 0, max = 1, value = 0.1, step = 0.01),
+#  
+#  numericInput("x_min", label = "Min for x-axis:", value = 0, min = 0, max = 1),
+#  numericInput("x_max", label = "Max for x-axis:", value = 1, min = 0, max = 1)
+#)
 
-renderPlot({
-  pp <- data.frame(p_hat = rep(0, 5000))
-  for(i in 1:5000){
-    samp <- sample(c(TRUE, FALSE), input$n, replace = TRUE, 
-                   prob = c(input$p, 1 - input$p))
-    pp$p_hat[i] <- sum(samp == TRUE) / input$n
-  }
-  bw <- diff(range(pp$p_hat)) / 30
-  ggplot(data = pp, aes(x = p_hat)) +
-    geom_histogram(binwidth = bw) +
-    xlim(input$x_min, input$x_max) +
-    ggtitle(paste0("Distribution of p_hats, drawn from p = ", input$p, ", n = ", input$n))
-})
+#renderPlot({
+#  pp <- data.frame(p_hat = rep(0, 5000))
+#  for(i in 1:5000){
+#    samp <- sample(c(TRUE, FALSE), input$n, replace = TRUE, 
+#                   prob = c(input$p, 1 - input$p))
+#    pp$p_hat[i] <- sum(samp == TRUE) / input$n
+#  }
+#  bw <- diff(range(pp$p_hat)) / 30
+#  ggplot(data = pp, aes(x = p_hat)) +
+#    geom_histogram(binwidth = bw) +
+#    xlim(input$x_min, input$x_max) +
+#    ggtitle(paste0("Distribution of p_hats, drawn from p = ", input$p, ", n = ", input$n))
+#})
+library(shiny)
+shinyApp(
+  ui = fluidPage(
+      numericInput("n", label = "Sample size:", value = 300),
+      sliderInput("p", label = "Population proportion:",
+                  min = 0, max = 1, value = 0.1, step = 0.01),
+      numericInput("x_min", label = "Min for x-axis:", value = 0, min = 0, max = 1),
+      numericInput("x_max", label = "Max for x-axis:", value = 1, min = 0, max = 1),
+    plotOutput('plotOutput')
+  ),
+  server = function(input, output) { 
+    output$plotOutput = renderPlot({
+      pp <- data.frame(p_hat = rep(0, 5000))
+      for(i in 1:5000){
+        samp <- sample(c(TRUE, FALSE), input$n, replace = TRUE, 
+                       prob = c(input$p, 1 - input$p))
+        pp$p_hat[i] <- sum(samp == TRUE) / input$n
+      }
+      bw <- diff(range(pp$p_hat)) / 30
+      ggplot(data = pp, aes(x = p_hat)) +
+        geom_histogram(binwidth = bw) +
+        xlim(input$x_min, input$x_max) +
+        ggtitle(paste0("Distribution of p_hats, drawn from p = ", input$p, ", n = ", input$n))
+    })
+  },
+  options = list(height = 500)
+)
 ```
 
 ## Q6-Q8
 
 ### 6.
-
+\
 	Describe the sampling distribution of sample proportions at $n = 300$ and 
     $p = 0.1$. Be sure to note the center, spread, and shape.
+\
+
+**The distribution is multi modal with 2 peaks, and appears nearly distributed, which is not surprising considering the sample size. It's most prominent peak is off center implying it is not symmetrical**
+
+![n=300 p=0.1](6.png){height=40%}
+
+\clearpage
 
 ### 7.  
-
+\
 	Keep $n$ constant and change $p$. How does the shape, center, and spread 
     of the sampling distribution vary as $p$ changes. You might want to adjust
     min and max for the $x$-axis for a better view of the distribution.
-    
-### 8.  
+\    
 
+**The spread widens with multi modals and peaks as $p$ deviates from *0.5* and the graph appears to be normally distributed at $p=0.49$**
+
+    
+\  
+![n=300 p=0.18](7_1.png){width=40%}
+![n=300 p=0.49](7_2.png){width=40%}
+\
+![n=300 p=0.90](7_3.png){width=40%}
+\
+
+\clearpage
+
+### 8.  
+\
 	Now also change $n$. How does $n$ appear to affect the distribution of $\hat{p}$?
+\
+
+**The Larger $n$ is the more normal the distribution appears**
+
+\  
+![n=300 p=0.18](8_1.png){width=40%}
+![n=300 p=0.49](8_2.png){width=40%}
+\
+![n=300 p=0.90](8_3.png){width=40%}
+\
+
+\clearpage
+
 
 * * *
 
@@ -297,22 +424,71 @@ explanatory variable. This means that when using `infer`, you need to include
 both variables within `specify`.
 
 ### 9.
-
+\
 	Is there convincing evidence that those who sleep 10+ hours per day are more
     likely to strength train every day of the week? As always, write out the 
     hypotheses for any tests you conduct and outline the status of the conditions
     for inference. If you find a significant difference, also quantify this 
     difference with a confidence interval. 
+\
+
+```{r Q9, echo = FALSE}
+Q9 <- yrbss %>%
+  filter(school_night_hours_sleep == "10+")
+count(Q9)
+```
+
+```{r Q9-indicator-texting, echo=FALSE}
+Q9 <- Q9 %>%
+  mutate(train_ind = ifelse(strength_training_7d == 7, "yes", "no"))
+```
+
+```{r Q9-text-ci, echo=FALSE}
+Q9 %>%
+  specify(response = train_ind, success = "yes") %>%
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "prop") %>%
+  get_ci(level = 0.95)
+```
+
+```{r Q9-mutate-conditions_for_mu_sd, include=FALSE}
+#str(Q9)
+Q9$val_train_ind<-as.factor(Q9$train_ind)
+Q9$val_train_ind<-ifelse(Q9$val_train_ind=="yes",1,0)
+```
+
+\
+ **$H_0$ : NULL Hypothesis Not all those that sleep 10+ hours have 7 days of Gym training**\newline
+ **$H_a$: All that sleep 10+ hours also workout 7 days a week**\newline 
+\
+
+```{r echo = FALSE}
+set.seed(9)
+Q9.sample<-sample(Q9$val_train_ind, size=100)
+#sd(Q9.sample,na.rm = TRUE)
+Q9.se<-sd(Q9.sample,na.rm = TRUE)/sqrt(length(Q9.sample))
+Q9.mu<-mean(Q9.sample,na.rm = TRUE)
+#Q4.mu
+paste0("Our Critical Intervals are 22.1% and 31.4%")
+paste0("Our mean for  the standard error for our sample is ",Q9.mu)
+paste0("with our ME = ",1.96*Q9.se)
+```
+
+\
+**22% is .1% short of our interval so we can reject the hypothesis**
 
 ### 10.  
-
+\
 	Let's say there has been no difference in likeliness to strength train every
     day of the week for those who sleep 10+ hours. What is the probablity that
     you could detect a change (at a significance level of 0.05) simply by chance?
     *Hint:* Review the definition of the Type 1 error.
+\
+
+**The type 1 error leaves room for a 5% chance the data is incorrect, hence we cannot reject the hypothesis with results so close**
 
 ### 11.  
-
+\
 	Suppose you're hired by the local government to estimate the proportion of 
     residents that attend a religious service on a weekly basis. According to 
     the guidelines, the estimate must have a margin of error no greater than 
@@ -321,6 +497,15 @@ both variables within `specify`.
     guidelines?\
     *Hint:* Refer to your plot of the relationship between $p$ and margin of 
     error. This question does not require using a dataset.
+    
+```{r}
+Q11p <-0.5
+Q11Z <-1.96
+Q11me <-0.01
+n<- Q11Z^2*Q11p*(1-Q11p)/Q11me^2
+n
+```
+    
 
 * * *
 
