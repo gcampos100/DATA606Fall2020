@@ -21,18 +21,13 @@ knitr::opts_chunk$set(eval = TRUE, results = FALSE, fig.show = "hide", message =
 
 **Getting Started**
 
-**Load packages**
-
-In this lab, we will explore and visualize the data using the **tidyverse** suite of 
-packages, and perform statistical inference using **infer**. The data can be found
-in the companion package for OpenIntro resources, **openintro**.
-
-Let's load the packages.
-
-```{r load-packages, message=FALSE}
+```{r load-packages,echo=FALSE, message=FALSE}
+library(DATA606)
 library(tidyverse)
 library(openintro)
 library(infer)
+library(dplyr)
+#library(inference)
 ```
 
 **The data**
@@ -55,8 +50,6 @@ numerical. The meaning of each variable can be found by bringing up the help fil
 ```{r help-nc}
 #?yrbss
 ```
-
-\clearpage
 
 ## 1.
 \
@@ -216,10 +209,10 @@ ggplot(data = null_dist, aes(x = stat)) +
 How many of these `null` permutations have a difference of at least `obs_stat`?\newline
 **ANSWER: **\newline
 
-The # of `null` permutations have a difference of at least `obs_stat` is 1000
+The # of `null` permutations have a difference of at least `obs_stat` is 0
 
 ```{r, include=FALSE}
-length(which(null_dist$stat <= 1.774584))
+sum(null_dist$stat > 1.7)
 ```
 
 \
@@ -238,18 +231,18 @@ This the standard workflow for performing hypothesis tests.
 \
 Construct and record a confidence interval for the difference between the 
 weights of those who exercise at least three times a week and those who don't, and
-interpret this interval in context of the data.
+interpret this interval in context of the data.\newline
 
-```{r}
-#null_dist %>%
- # specify(response = stat, success <= 1.774584) %>%
-  #generate(reps = 1000, type = "bootstrap") %>%
-  #calculate(stat = "prop") %>%
-  #get_ci(level = 0.95)
+**ANSWER:** Using  [Inference function](https://www.rdocumentation.org/packages/statsr/versions/0.2.0/topics/inference) in **library(DATA606)** with parameters $type=ci$ and $method=theoretical$ for the **CLT** method, for the below output. We see that we cannot reject the NULL hypothesis that 3days of inactivity does not necessarily result in weight gain, since the data does not support our $H_A$
+
+```{r inference function,echo=FALSE, results='markup'}
+inference(y = yrbss$weight, x = yrbss$physical_3plus,est = "mean", type = "ci", method = "theoretical")
 ```
 
 
 * * *
+
+\clearpage
 
 ## More Practice
 
@@ -258,21 +251,50 @@ interpret this interval in context of the data.
 Calculate a 95% confidence interval for the average height in meters (`height`)
 and interpret it in context.
 
+```{r, echo=FALSE, results='markdown', fig.show='show'}
+inference(y=yrbss$height, est = "mean", type = "ci", method = "theoretical", conflevel = 0.95)
+```
+
+
 ## 9.
 \
 Calculate a new confidence interval for the same parameter at the 90% 
 confidence level. Comment on the width of this interval versus 
 the one obtained in the previous exercise.
 
+```{r, echo=FALSE, results='markdown', fig.show='show'}
+inference(y=yrbss$height, est = "mean", type = "ci", method = "theoretical", conflevel = 0.90)
+```
+
 ## 10.
 \
 Conduct a hypothesis test evaluating whether the average height is different
 for those who exercise at least three times a week and those who don't.
 
+```{r inf-height-habit-ht-null, tidy=FALSE, warning = FALSE}
+null_dist_ht <- yrbss %>%
+  specify(height ~ physical_3plus) %>%
+  hypothesize(null = "independence") %>%
+  generate(reps = 1000, type = "permute") %>%
+  calculate(stat = "diff in means", order = c("yes", "no"))
+```
+
+
+```{r}
+ggplot(data = null_dist_ht, aes(x = stat)) +
+  geom_histogram()
+```
+
 ## 11.
 \
 Now, a non-inference task: Determine the number of different options there 
-are in the dataset for the `hours_tv_per_school_day` there are.
+are in the dataset for the `hours_tv_per_school_day` there are.\newline
+**ANSWER** There are 8 different options **<1,1,2,3,4,5+,NA**
+
+```{r, include=FALSE}
+unique(yrbss$hours_tv_per_school_day)
+```
+
 
 ## 12.
 \
@@ -280,7 +302,55 @@ Come up with a research question evaluating the relationship between height
 or weight and sleep. Formulate the question in a way that it can be answered using
 a hypothesis test and/or a confidence interval. Report the statistical results, 
 and also provide an explanation in plain language. Be sure to check all 
-assumptions, state your $\alpha$ level, and conclude in context.
+assumptions, state your $\alpha$ level, and conclude in context.\newline
+
+\
+
+```{r create new var Q12, echo=FALSE}
+yrbss <- yrbss %>% 
+  mutate(sleep_7less = ifelse(yrbss$school_night_hours_sleep < 7, "yes", "no"))
+```
+
+```{r inf-weight-habit-ht-initial_Q12, tidy=FALSE,echo=FALSE, warning = FALSE}
+obs_diff_Q12 <- yrbss %>%
+  specify(weight ~ sleep_7less) %>%
+  calculate(stat = "diff in means", order = c("yes", "no"))
+```
+
+```{r inf-weight-habit-ht-null_Q12, tidy=FALSE,echo=FALSE, warning = FALSE}
+null_dist_Q12 <- yrbss %>%
+  specify(weight ~ sleep_7less) %>%
+  hypothesize(null = "independence") %>%
+  generate(reps = 1000, type = "permute") %>%
+  calculate(stat = "diff in means", order = c("yes", "no"))
+```
+
+```{r, echo=FALSE}
+ggplot(data = null_dist_Q12, aes(x = stat)) +
+  geom_histogram()
+```
+
+```{r, include=FALSE}
+sum(null_dist_Q12$stat>1.50412,na.rm = TRUE)
+
+```
+
+```{r inf-weight-habit-ht-pvalue_Q12, echo=FALSE,warning=FALSE}
+null_dist_Q12 %>%
+  get_p_value(obs_stat = obs_diff, direction = "two_sided")
+```
+
+```{r inference function_Q12,echo=FALSE, results='markup'}
+inference(y = yrbss$weight, x = yrbss$sleep_7less,est = "mean", type = "ci", method = "theoretical")
+```
+
+**ANSWER:**\newline
+
+**$H_0$:$\mu_{weight\ne sleep7less}=\mu_{weight=sleep7less}$**\newline
+**$H_A$:$\mu_{weight\ne sleep7less}>\mu_{weight=sleep7less}$**\newline
+
+\
+Using  [Inference function](https://www.rdocumentation.org/packages/statsr/versions/0.2.0/topics/inference) in **library(DATA606)** with parameters $type=ci$ and $method=theoretical$ for the **CLT** method, for the below output. We see that we cannot reject the NULL hypothesis that Less than 7 hours of sleep does not necessarily result in weight gain, since the data does not support our $H_A$
 
 * * *
 
