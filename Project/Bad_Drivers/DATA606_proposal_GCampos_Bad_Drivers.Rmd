@@ -1,0 +1,132 @@
+---
+title: DATA 606 Data Project Proposal
+author: Gabriel Campos
+---
+
+### Data Preparation
+
+```{r setup, echo=TRUE, results='hide', warning=FALSE, message=FALSE}
+# load data
+library(tidyverse)
+library (readr)
+urlfile="https://raw.githubusercontent.com/fivethirtyeight/data/master/bad-drivers/bad-drivers.csv"
+project_data<-read_csv(url(urlfile))
+```
+
+**Elements in project data are: **
+
+```{r, echo=FALSE}
+glimpse(project_data)
+```
+\
+**All 51 states make up the data set**
+\
+```{r, echo=FALSE}
+str(project_data$State)
+```
+\
+**5 subsets based on `project_data` are made from project data based on region**
+\
+
+```{r, include=FALSE}
+west <- project_data %>%
+  filter(State == "Arizona"| State == "California"| State =="Colorado"| State =="Idaho"| State =="Montana"
+  	   | State =="Nevada"| State == "New Mexico"| State =="Oregon" | State == "Utah"| State =="Washington"
+  	   | State =="Wyoming")
+midwest <- project_data %>%
+  filter(State == "Illinois"| State == "Indiana"| State =="Iowa"| State =="Kansas"| State =="Michigan"
+  	   | State =="Minnesota"| State == "Missouri"| State =="Nebraska" | State == "North Dakota"| State =="Ohio"
+  	   | State =="South Dakota"| State =="Wisconsin")
+northeast <- project_data %>%
+  filter(State == "Connecticut"| State == "Delaware"| State =="Maine"| State =="Massachusetts"
+  	   | State =="New Hampshire"| State =="New Jersey"| State == "New York"| State =="Pennsylvania"
+  	   | State == "Rhode Island"| State =="Vermont")
+south <- project_data %>%
+  filter(State == "Alabama"| State == "Arkansas"| State =="Florida"| State =="Georgia"| State =="Kentucky"
+  	   | State =="Louisiana"| State == "Mississippi"| State =="North Carolina"| State == "Oklahoma"
+  	   | State =="South Carolina"| State =="South Carolina"| State =="Tennessee"| State =="Texas"| State =="Virgina"
+  	   | State =="West Virgina")
+pacific<- project_data %>%
+  filter(State == "Alaska"| State == "Hawaii")
+```
+
+**Regions are composed as West:**
+```{r, echo=FALSE}
+str(west$State)
+```
+**Midwest**
+```{r, echo=FALSE}
+str(midwest$State)
+```
+**Northeast**
+```{r, echo=FALSE}
+str(northeast$State)
+```
+**South**
+```{r, echo=FALSE}
+str(south$State)
+```
+**&  Pacific**
+```{r, echo=FALSE}
+str(pacific$State)
+```
+
+
+![US regions based on [census.gov](https://www2.census.gov/geo/pdfs/maps-data/maps/reference/us_regdiv.pdf) ](regions.PNG){width=50%}
+
+
+### Research question 
+
+**Question: What region in the United States have the worst drivers?**
+
+$H_0$ = $Region1_{fatal.accidents}\le Region(2...5)_{fatal.accidents}$
+$H_A$ = $Region1_{fatal.accidents}> Region(2...5)_{fatal.accidents}$
+
+
+
+
+### Cases 
+
+**What are the cases, and how many are there?**
+
+
+
+### Data collection 
+
+**Describe the method of data collection.**
+
+
+
+### Type of study 
+
+**What type of study is this (observational/experiment)?**
+
+
+
+### Data Source 
+
+**If you collected the data, state self-collected. If not, provide a citation/link.**
+
+
+
+
+### Dependent Variable
+
+**What is the response variable? Is it quantitative or qualitative?**
+
+
+
+### Independent Variable
+
+**You should have two independent variables, one quantitative and one qualitative.**
+
+
+
+### Relevant summary statistics 
+
+**Provide summary statistics for each the variables. Also include appropriate visualizations related to your research question (e.g. scatter plot, boxplots, etc). This step requires the use of R, hence a code chunk is provided below. Insert more code chunks as needed.**
+
+```{r}
+
+```
+

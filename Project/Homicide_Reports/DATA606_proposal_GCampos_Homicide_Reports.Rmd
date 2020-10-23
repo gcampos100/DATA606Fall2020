@@ -1,0 +1,172 @@
+---
+title: DATA 606 Data Project Proposal
+author: Gabriel Campos
+---
+
+### Data Preparation
+
+```{r setup, echo=FALSE, results='hide', warning=FALSE, message=FALSE}
+# load data
+library(tidyverse)
+library(openintro)
+library(infer)
+library(dplyr)
+library(VennDiagram)
+library(scales)
+library(data.table)
+library (readr)
+project_data<- read_csv("database.csv")
+
+```
+
+```{r regional-subsets, echo=TRUE, results= FALSE, include=TRUE}
+west <- project_data %>%
+  filter(State == "Arizona"| State == "California"| State =="Colorado"| State =="Idaho"| State =="Montana"
+  	   | State =="Nevada"| State == "New Mexico"| State =="Oregon" | State == "Utah"| State =="Washington"
+  	   | State =="Wyoming")
+midwest <- project_data %>%
+  filter(State == "Illinois"| State == "Indiana"| State =="Iowa"| State =="Kansas"| State =="Michigan"
+  	   | State =="Minnesota"| State == "Missouri"| State =="Nebraska" | State == "North Dakota"| State =="Ohio"
+  	   | State =="South Dakota"| State =="Wisconsin")
+northeast <- project_data %>%
+  filter(State == "Connecticut"| State == "Delaware"| State =="Maine"| State =="Massachusetts"
+  	   | State =="New Hampshire"| State =="New Jersey"| State == "New York"| State =="Pennsylvania"
+  	   | State == "Rhode Island"| State =="Vermont")
+south <- project_data %>%
+  filter(State == "Alabama"| State == "Arkansas"| State =="Florida"| State =="Georgia"| State =="Kentucky"
+  	   | State =="Louisiana"| State == "Mississippi"| State =="North Carolina"| State == "Oklahoma"
+  	   | State =="South Carolina"| State =="South Carolina"| State =="Tennessee"| State =="Texas"| State =="Virgina"
+  	   | State =="West Virgina")
+pacific<- project_data %>%
+  filter(State == "Alaska"| State == "Hawaii")
+```
+
+### Research question 
+
+**Question: Between 1980-2014, was the South the most dangerous region to live in the US?**
+
+![US regions based on [census.gov](https://www2.census.gov/geo/pdfs/maps-data/maps/reference/us_regdiv.pdf) ](regions.PNG){width=50%}
+
+$H_0$ = $Region_{south}\le Region_{west..midwest...northeast...pacific}$
+$H_A$ = $Region_{south}> Region_{west..midwest...northeast...pacific}$
+
+### Cases 
+
+**What are the cases, and how many are there?**
+
+**Categorical Data:** Record ID, Agency Code, Agency Name, Agency Type, City, State,Incident,Crime Type,Crime Solved,Victim Sex,Victim Race,Victim Ethnicity,Perpetrator Sex,Perpetrator,Race,Perpetrator,Ethnicity,Relationship,Weapon,Record Source, Region (**Derived by creating sub datasets NOTE CHUNK $r$ $regional-subsets$**) \newline
+\
+**Numerical:** Year,Month,Victim Age,Perpetrator Age,Victim Count,Perpetrator Count \newline
+\
+**Outliers:** N/A \newline
+\
+There are 638,454 total cases in our data set, representing murders committed throughout the United States from 1980-2014.\newline
+
+
+```{r, echo=FALSE, include=FALSE}
+glimpse(project_data)
+paste('West coast cases ',NROW(na.omit(west)))
+paste('Midwest cases ',NROW(na.omit(midwest)))
+paste('Northeast cases ',NROW(na.omit(northeast)))
+paste('South cases ' , NROW(na.omit(south)))
+paste('Pacific cases', NROW(na.omit(pacific)))
+```
+
+
+
+
+### Data collection 
+
+**Describe the method of data collection.**\newline
+
+**Data source: [kaggle.com](https://www.kaggle.com/murderaccountability/homicide-reports?select=database.csv)**\newline
+	
+	Content
+	The Murder Accountability Project is the most complete database of homicides in the United States currently 
+	available. This dataset includes murders from the FBI's Supplementary Homicide Report from 1976 to the present 
+	and	Freedom of Information Act data on more than 22,000 homicides that were not reported to the Justice 
+	Department.	This dataset includes the age, race, sex, ethnicity of victims and perpetrators, in addition to the 
+	relationship between the victim and perpetrator and weapon used.
+
+	Acknowledgements
+	The data was compiled and made available by the Murder Accountability Project, founded by Thomas Hargrove.
+	
+*Homicide Reports, 1980-2014
+Project
+https://www.kaggle.com/murderaccountability/homicide-reports?select=database.csv*
+
+
+### Type of study 
+
+**What type of study is this (observational/experiment)?**\newline
+\
+Observational
+
+
+### Data Source 
+
+**If you collected the data, state self-collected. If not, provide a citation/link.**
+
+*Homicide Reports, 1980-2014
+Project
+https://www.kaggle.com/murderaccountability/homicide-reports?select=database.csv*
+
+
+### Dependent Variable
+
+```{r, echo=FALSE}
+names(project_data)
+```
+
+
+**What is the response variable? Is it quantitative or qualitative?**
+
+Region of Murder count, which is counted with Record ID and is quantitative.
+
+### Independent Variable
+
+**You should have two independent variables, one quantitative and one qualitative.**
+Victim Age (Quantitative) and Victim Sex (Qualitative)
+
+### Relevant summary statistics 
+
+**Provide summary statistics for each the variables. Also include appropriate visualizations related to your research question (e.g. scatter plot, boxplots, etc). This step requires the use of R, hence a code chunk is provided below. Insert more code chunks as needed.**
+
+```{r hist_west_coast, echo=FALSE, fig.width=4, fig.height=3, include=FALSE}
+# option 2 for plot
+
+plot( as.factor(west$Year),main ='West Coast Murders 1980-2014' , las=2) 
+plot( as.factor(midwest$Year),main ='Midwest Coast Murders 1980-2014' , las=2)
+plot( as.factor(northeast$Year),main ='Northeast Coast Murders 1980-2014' , las=2)
+plot( as.factor(south$Year),main ='South Coast Murders 1980-2014' , las=2)
+plot( as.factor(pacific$Year),main ='Pacific Coast Murders 1980-2014' , las=2)
+```
+
+```{r, echo=FALSE}
+plot( as.factor(project_data$Year),main ='US Murders 1980-2014' , las=2)
+
+```
+
+```{r, echo=FALSE, fig.width=4, fig.height=3}
+ggplot(project_data)+geom_bar(aes(x=`Victim Sex`))
+
+```
+```{r}
+count<-project_data$`Victim Age`
+table(count)
+```
+
+```{r}
+labs <- c(paste(seq(0, 100, by = 10), seq(0 + 10 - 1, 100 - 1, by = 10),
+                sep = "-"), paste(100, "+", sep = ""),"990-100")
+
+labs
+```
+
+
+```{r}
+project_data$`Victim AgeGroup`<- cut(project_data$`Victim Age`, breaks=c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100), right = FALSE)
+ggplot(project_data)+geom_bar(aes(x=`Victim AgeGroup`))
+```
+
+
