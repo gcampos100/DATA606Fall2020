@@ -8,6 +8,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(DATA606)
 ```
 
 ## Baby weights, Part I.(9.1, p. 350)
@@ -139,7 +140,17 @@ Calculate the residual for the first observation in the data set: a student who 
 
 The variance of the residuals is 240.57, and the variance of the number of 
 absent days for all students in the data set is 264.17. Calculate the $R^2$ and 
-the adjusted $R^2$. Note that there are 146 observations in the data set.
+the adjusted $R^2$. Note that there are 146 observations in the data set.\newline
+
+* $R^2$ = $1 - \frac{variability\ in\ residuals}{variability\ in\ the\ outcome}$ 
+* $R^2$ = $1 - \frac{240.57}{264.17}$ = **ANSWER:**0.08933641
+* $R^2_{adj}$ = $1 - \frac{s^2_{residuals}}{s^2_{outcome}} \times \frac{n-1}{n-k-1}$
+* $R^2_{adj}$ = $1 - \frac{240.57}{264.17} \times \frac{146-1}{146-3-1}$ = **ANSWER:**0.07009704
+
+```{r, results='hide'}
+1 - (240.57)/(264.17)
+1 - (240.57/264.17)*((146-1)/(146-3-1))
+```
 
 
 
@@ -168,8 +179,8 @@ Exercise above considers a model that predicts the number of days absent using t
 \end{tabular}
 \end{center}
 
-Which, if any, variable should be removed from the model first?
-
+Which, if any, variable should be removed from the model first?\newline
+**ANSWER:** $R^2_{lrn\ adj}$ = 0.0723 $\therefore$ it should be removed from the model first.
 
 
 
@@ -209,11 +220,30 @@ Undamaged         & 5  & 6 & 6 & 6 & 6 & 5 & 6 & 6 & 6 & 6 & 6 \\
 
 ### (a)
 
-Each column of the table above represents a different shuttle mission. Examine these data and describe what you observe with respect to the relationship between temperatures and damaged O-rings.
+Each column of the table above represents a different shuttle mission. Examine these data and describe what you observe with respect to the relationship between temperatures and damaged O-rings.\newline
+**ANSWER:**\newline
+Lower Temps have the most `0-ring~ damage', with **8** out of **11** coming from temps 63$^\circ$ and lower.
+
+```{r, echo=FALSE,results='hide',out.width="75%"}
+
+temp <- c(53,57,58,63,66,67,67,67,68,69,70,70,70,70,72,73,75,75,76,76,78,79,81)
+dmg <- c(5,1,1,1,0,0,0,0,0,0,1,0,1,0,0,0,0,1,0,0,0,0,0)
+undmg <- c(1,5,5,5,6,6,6,6,6,6,5,6,5,6,6,6,6,5,6,6,6,6,6)
+CDI <- data.frame(temp, dmg, undmg)
+plot(CDI)
+```
+
 
 ### (b)
 
 Failures have been coded as 1 for a damaged O-ring and 0 for an undamaged O-ring, and a logistic regression model was fit to these data. A summary of this model is given below. Describe the key components of this summary table in words.
+**ANSWER:**
+
+* **Estimates:** Parameter estimates
+* **Z-value & P-value:** Used to characterize importance
+* **Analysis:** Likelihood of O-ring damage decreases by 0.2162 for each degree temperature increases
+* **P-value:** $lim_{p-value\rightarrow 0}$ $\uparrow significance$ $\therefore$ there is statistical significance between tempature and damage of an `O-ring`. 
+
 
 \begin{center}
 \begin{tabular}{rrrrr}
@@ -228,11 +258,17 @@ Temperature & -0.2162  & 0.0532     & -4.07     & 0.0000 \\
 
 ### (c)
 
-Write out the logistic model using the point estimates of the model parameters.
+Write out the logistic model using the point estimates of the model parameters.\newline
+**ANSWER:**\newline
+$logit(p_i)$ = $log_e(\frac{p_i}{1-p_i})$ = $\beta_0 + \beta_1x_{1,i} + .... +\beta_kx_{k,i}$\newline
+**=** $11.6630-0.2162 \times Temp$
+
 
 ### (d)
 
-Based on the model, do you think concerns regarding O-rings are justified? Explain.
+Based on the model, do you think concerns regarding O-rings are justified? Explain.\newline
+**ANSWER:**\newline
+Yes concerns regarding `O-ring` damage below $53^\circ$ is justified, since the trend implies more frequent damage is probable.
 
 
 
@@ -295,13 +331,49 @@ where $\hat{p}$ is the model-estimated probability that an O-ring will become da
 	&& \hat{p}_{71} = 0.024
 \end{align*}
 
+**ANSWER:** Probability of damage at:
+
+* $51^\circ$ is 65.4%
+* $53^\circ$ is 55.09%
+* $55^\circ$ is 44.32%
+
+\clearpage
+
++ **NOTE:** Solving for $\hat p$ we get $\hat p$=$\frac{e^{11.6630-2162 \times Temp}}{1 + e^{11.6630-0.2162 \times Temp}}$
+
+```{r, results='hide'}
+# with 6 inputs a function seemed appropriate
+p_value<-function(p)
+{
+# formula to test damage for O-ring
+	dmg <- 11.6630-0.2162*p
+# p-hat formula
+	Q5 <-exp(dmg)/(1+exp(dmg))
+	return (Q5)
+}
+p_value(51) 
+p_value(53)
+p_value(55)
+
+```
+
+
 ### (b)
 
 Add the model-estimated probabilities from part~(a) on the plot, then connect these dots using a smooth curve to represent the model-estimated probabilities.
+**ANSWER:** *(using dataframe CDI made for Challenger Disaster I)
+```{r, out.width="50%"}
+ggplot(CDI,aes(x=temp,y=dmg)) + geom_point() + 
+  geom_smooth(method = 'lm')
+```
+
 
 ### (c)
 
-Describe any concerns you may have regarding applying logistic regression in this application, and note any assumptions that are required to accept the model's validity.
+Describe any concerns you may have regarding applying logistic regression in this application, and note any assumptions that are required to accept the model's validity.\newline
+
+**ANSWER:**\newline
+My concern would be Independence and sample size. I would want more than 23 samples or more variables.
 
 
 
