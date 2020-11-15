@@ -1,0 +1,201 @@
+---
+title: Relationship between US Regions and Homocide Rates of Young Women between 1980-2014
+subtitle: DATA 606 Data Project Submission
+author: Gabriel Campos
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  pdf_document: default
+---
+
+```{r, echo=FALSE}
+paste0(" Attaching packages: tidyverse,openintro,infer,dplyr,VennDiagram,scales,data.table,readr ")
+```
+
+
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+# load data
+# Load data from IPEDS.
+library(tidyverse)
+library(openintro)
+library(infer)
+library(dplyr)
+library(VennDiagram)
+library(scales)
+library(data.table)
+library (readr)
+```
+
+
+## Part 1 - Introduction
+
+	A primary concern regarding public safety that impacts all of society is murder.
+	The threat of murder negatively impacts the widely accepted fundamental human need
+	for safety.	Murder by region can impact the population psychologically, economically 
+	and can stifle a community's continued progress for a better standard of living.
+	Gaining insight on those who are the most vulnerable and impacted by murder is 
+	necessary to forge initiatives in assisting those victimized by its threat. Like many
+	approaches in troubleshooting or diagnosing an issue, understanding where to begin is
+	a key first step. In order to focus this analysis, we will focus specifically on murder
+	rates for women under 30 against the entire data set.
+	
+### Overview
+
+	The goals for this project are to:
+
+* Think about the independent and dependent variables in correlation to murder rates including region, gender and age
+* Compare murder rates by region, race, gender and age based on the data set
+* Draw conclusions of the most at risk population by region for murder in the United States based on findings
+
+\
+
+***
+\clearpage
+	
+## Part 2 - Data
+
+### Collection
+
+	The Murder Accountability Project is the most complete database of homicides in 
+	the United States currently available. This dataset includes murders from the FBI's
+	Supplementary Homicide Report from 1976 to the present and Freedom of Information
+	Act data on more than 22,000 homicides that were not reported to the Justice Department.
+	This dataset includes the age, race, sex, ethnicity of victims and perpetrators, in
+	addition to the relationship between the victim and perpetrator and weapon used. A
+	victims age is rounded down qualifying toddlers 11 months old or younger as 0 years old.
+	If a victim's age cannot be determined, they will be categorized as 998 years old
+	respectively. 
+*Data source: [kaggle.com](https://www.kaggle.com/murderaccountability/homicide-reports?select=database.csv)*\newline
+
+### Load Data
+
+```{r vecotr-region, echo=FALSE}
+project_data<- read_csv("D:/Bulk Data/database.csv")
+project_data$Region<-
+	ifelse(project_data$State=="Arizona" |
+		   	project_data$State=="California"| project_data$State=="Colorado"| project_data$State=="Idaho"|
+		   	project_data$State=="Montana"| project_data$State=="Nevada"| project_data$State=="New Mexico"|
+		   	project_data$State=="Oregon"| project_data$State=="Utah"| project_data$State=="Washington"|
+		   	project_data$State=="Wyoming","West",
+		   ifelse(project_data$State=="Illinois"|
+		   	   	project_data$State == "Indiana"| project_data$State == "Iowa"| project_data$State == "Kansas"|
+		   	   	project_data$State == "Michigan"| project_data$State == "Minnesota"| project_data$State ==
+		   	   	"Missouri"| project_data$State == "Nebraska"| project_data$State == "North Dakota"|
+		   	   	project_data$State == "Ohio"| project_data$State == "South Dakota"| project_data$State ==
+		   	   	"Wisconsin","Midwest",
+		   	   ifelse(project_data$State == "Connecticut"| project_data$State == "Delaware"| project_data$State
+		   	   	   =="Maine"| project_data$State =="Massachusetts"| project_data$State =="New Hampshire"
+		   	   	   |project_data$State =="New Jersey"| project_data$State == "New York"| project_data$State
+		   	   	   =="Pennsylvania"| project_data$State == "Rhode Island"| project_data$State=="Vermont","Northeast",
+		   	   	   ifelse(project_data$State == "Alaska"| project_data$State == "Hawaii","Pacific","South")
+		   	   	   )
+		   	   )
+		   )
+```
+
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+west <- project_data %>%
+  filter(State == "Arizona"| State == "California"| State =="Colorado"
+  	   | State =="Idaho"| State =="Montana"| State =="Nevada"
+  	   | State == "New Mexico"| State =="Oregon" | State == "Utah"
+  	   | State =="Washington"| State =="Wyoming")
+midwest <- project_data %>%
+  filter(State == "Illinois"| State == "Indiana"| State =="Iowa"
+  	   | State =="Kansas"| State =="Michigan"| State =="Minnesota"
+  	   | State == "Missouri"| State =="Nebraska"| State == "North Dakota"
+  	   | State =="Ohio"| State =="South Dakota"| State =="Wisconsin")
+northeast <- project_data %>%
+  filter(State == "Connecticut"| State == "Delaware"| State =="Maine"
+  	   | State =="Massachusetts"| State =="New Hampshire"
+  	   | State =="New Jersey"| State == "New York"| State =="Pennsylvania"
+  	   | State == "Rhode Island"| State =="Vermont")
+south <- project_data %>%
+  filter(State == "Alabama"| State == "Arkansas"| State =="Florida"
+  	   | State =="Georgia"| State =="Kentucky"| State =="Louisiana"
+  	   | State == "Mississippi"| State =="North Carolina"| State == "Oklahoma"
+  	   | State =="South Carolina"| State =="South Carolina"| State =="Tennessee"
+  	   | State =="Texas"| State =="Virgina"| State =="West Virgina")
+pacific<- project_data %>%
+  filter(State == "Alaska"| State == "Hawaii")
+
+paste0("Loading Data: database.csv ")
+paste0("Subset Data: Region <- project_data %>% filter() ")
+paste0("Vector Region: project_data$Region<-ifelse(State,Region1,ifelse(State,Region2,")
+paste0("ifelse(State,Region...Default)) ")
+paste0("Regions based on census.gov site : West, Midwest, Northeast, South, Pacific ")
+```
+***
+
+\clearpage
+
+### Census Map
+
+
+![US regions based on [census.gov](https://www2.census.gov/geo/pdfs/maps-data/maps/reference/us_regdiv.pdf) ](regions.PNG){height=100%}
+
+***
+
+\clearpage
+
+### Cases
+
+**Categorical Data:** Record ID, Agency Code, Agency Name, Agency Type, City, State,Incident,\newline
+Crime Type,Crime Solved,Victim Sex,Victim Race,Victim Ethnicity,Perpetrator Sex,\newline
+Perpetrator Race,Perpetrator,Ethnicity,Relationship,Weapon,Record Source, \newline
+Region\newline
+\
+**Numerical:** Year,Month,Victim Age,Perpetrator Age,Victim Count,Perpetrator Count \newline
+\
+**Outliers:** 974 \newline
+
+```{r, echo = FALSE, results='hide'}
+project_data %>% filter(`Victim Sex` == "Female" & `Victim Age`< 31) %>% glimpse()
+glimpse(project_data)
+```
+
+There are **638,454** total cases in our data set, with **66,301** representing **murders** committed against **Female's under** the age of **30** throughout the United States from 1980-2014
+
+**A break down of murders by age are as follows**\newline
+$Note:Age\ 998\ was\ assigned\ to\ victims\ who's\ age\ could\ not\ be\ determined.$\newline
+$To\ avoid\ the\ impact\ it\ will\ have\ on\ our\ results\ I\ will\ remove\ it\ from\ our\ existing\ dataframes$
+
+```{r, echo=FALSE}
+count<-project_data$`Victim Age`
+table(count)
+project_data<-project_data[!(project_data$`Victim Age`==998) & project_data$`Victim Sex`!='Unknown',]
+west<-west[!(west$`Victim Age`==998) & west$`Victim Sex`!='Unknown',]
+midwest<-midwest[!(midwest$`Victim Age`==998) & midwest$`Victim Sex`!='Unknown',]
+northeast<-northeast[!(northeast$`Victim Age`==998) & northeast$`Victim Sex`!='Unknown',]
+south<-south[!(south$`Victim Age`==998) & south$`Victim Sex`!='Unknown',]
+pacific<-pacific[!(pacific$`Victim Age`==998) & pacific$`Victim Sex`!='Unknown',]
+paste0("Non determined variables removed with the following command:")
+paste0("data.frame<-data.frame[!(dataframe$`Victim Age`==998),]")
+paste0("Summary of age")
+summary(project_data$`Victim Age`)
+ggplot(project_data)+geom_bar(aes(x=`Victim Sex`,fill = `Victim Sex`))+coord_flip()
+```
+
+## Part 3 - Exploratory data analysis
+
+```{r full data,echo=FALSE, results='hide', include=TRUE,fig.show='show', fig.height= 2.5}
+#ggplot(project_data, aes(x = year, colour = project_data$`Victim Sex`)) + geom_density()
+```
+
+## Part 4 - Inference
+
+
+## Part 5 - Conclusion
+
+
+## References:
+
+### Homicide Reports, 1980-2014
+
+*Project
+https://www.kaggle.com/murderaccountability/homicide-reports?select=database.csv*
+
+## Appendix (optional):
+
+Remove this section if you don't have an appendix
