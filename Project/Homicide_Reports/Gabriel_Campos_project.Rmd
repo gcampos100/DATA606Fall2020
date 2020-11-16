@@ -7,21 +7,16 @@ output:
   pdf_document: default
 ---
 
-```{r, echo=FALSE}
-paste0(" Attaching packages: tidyverse,openintro,infer,dplyr,VennDiagram,scales,data.table,readr ")
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+paste0(" Attaching packages: DATA606,infer,dplyr,VennDiagram,scales,data.table,readr ")
 ```
 
-
-
-```{r echo=FALSE, warning=FALSE, message=FALSE}
-# load data
-# Load data from IPEDS.
-library(tidyverse)
-library(openintro)
+```{r echo=FALSE, warning=FALSE, message=FALSE,include=FALSE}
+library(DATA606)
 library(infer)
 library(dplyr)
 library(VennDiagram)
-library(scales)
+#library(scales)
 library(data.table)
 library (readr)
 ```
@@ -29,7 +24,7 @@ library (readr)
 
 ## Part 1 - Introduction
 
-	A primary concern regarding public safety that impacts all of society is murder.
+	A primary concern regarding public safety that, impacts all of society is murder.
 	The threat of murder negatively impacts the widely accepted fundamental human need
 	for safety.	Murder by region can impact the population psychologically, economically 
 	and can stifle a community's continued progress for a better standard of living.
@@ -37,7 +32,7 @@ library (readr)
 	necessary to forge initiatives in assisting those victimized by its threat. Like many
 	approaches in troubleshooting or diagnosing an issue, understanding where to begin is
 	a key first step. In order to focus this analysis, we will focus specifically on murder
-	rates for women under 30 against the entire data set.
+	rates for 'women under 30' against the entire data set.
 	
 ### Overview
 
@@ -45,7 +40,7 @@ library (readr)
 
 * Think about the independent and dependent variables in correlation to murder rates including region, gender and age
 * Compare murder rates by region, race, gender and age based on the data set
-* Draw conclusions of the most at risk population by region for murder in the United States based on findings
+* Draw conclusions of the most at risk region for our specific population in the United States based on our findings
 
 \
 
@@ -62,14 +57,14 @@ library (readr)
 	Act data on more than 22,000 homicides that were not reported to the Justice Department.
 	This dataset includes the age, race, sex, ethnicity of victims and perpetrators, in
 	addition to the relationship between the victim and perpetrator and weapon used. A
-	victims age is rounded down qualifying toddlers 11 months old or younger as 0 years old.
+	victims age is rounded down by year (e.g. toddlers 11 months old or younger qualify as 0 years old).
 	If a victim's age cannot be determined, they will be categorized as 998 years old
 	respectively. 
 *Data source: [kaggle.com](https://www.kaggle.com/murderaccountability/homicide-reports?select=database.csv)*\newline
 
 ### Load Data
 
-```{r vecotr-region, echo=FALSE}
+```{r vecotr-region, echo=FALSE, message=FALSE, warning=FALSE}
 project_data<- read_csv("D:/Bulk Data/database.csv")
 project_data$Region<-
 	ifelse(project_data$State=="Arizona" |
@@ -91,6 +86,11 @@ project_data$Region<-
 		   	   	   )
 		   	   )
 		   )
+
+project_data$`Victim AgeGroup`<- cut(project_data$`Victim Age`,
+									 breaks=c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100),
+									 right = FALSE)
+
 ```
 
 
@@ -123,19 +123,12 @@ pacific<- project_data %>%
 paste0("Loading Data: database.csv ")
 paste0("Subset Data: Region <- project_data %>% filter() ")
 paste0("Vector Region: project_data$Region<-ifelse(State,Region1,ifelse(State,Region2,")
-paste0("ifelse(State,Region...Default)) ")
-paste0("Regions based on census.gov site : West, Midwest, Northeast, South, Pacific ")
+paste0("Vector AgeGroup: project_data$`Victim AgeGroup`<- cut(project_data$`Victim Age`,... ")
 ```
-***
 
-\clearpage
-
-### Census Map
+![US regions based on [census.gov](https://www2.census.gov/geo/pdfs/maps-data/maps/reference/us_regdiv.pdf) ](regions.PNG){height=40%}
 
 
-![US regions based on [census.gov](https://www2.census.gov/geo/pdfs/maps-data/maps/reference/us_regdiv.pdf) ](regions.PNG){height=100%}
-
-***
 
 \clearpage
 
@@ -143,7 +136,7 @@ paste0("Regions based on census.gov site : West, Midwest, Northeast, South, Paci
 
 **Categorical Data:** Record ID, Agency Code, Agency Name, Agency Type, City, State,Incident,\newline
 Crime Type,Crime Solved,Victim Sex,Victim Race,Victim Ethnicity,Perpetrator Sex,\newline
-Perpetrator Race,Perpetrator,Ethnicity,Relationship,Weapon,Record Source, \newline
+Perpetrator Race,Perpetrator Ethnicity,Relationship,Weapon,Record Source, \newline
 Region\newline
 \
 **Numerical:** Year,Month,Victim Age,Perpetrator Age,Victim Count,Perpetrator Count \newline
@@ -172,15 +165,237 @@ south<-south[!(south$`Victim Age`==998) & south$`Victim Sex`!='Unknown',]
 pacific<-pacific[!(pacific$`Victim Age`==998) & pacific$`Victim Sex`!='Unknown',]
 paste0("Non determined variables removed with the following command:")
 paste0("data.frame<-data.frame[!(dataframe$`Victim Age`==998),]")
-paste0("Summary of age")
-summary(project_data$`Victim Age`)
-ggplot(project_data)+geom_bar(aes(x=`Victim Sex`,fill = `Victim Sex`))+coord_flip()
+
 ```
+\clearpage
+
+	The charts below show that of the murders reported, the majority of these are against men.
+	Additionally, regardless of gender, nationally the highest murder victims age falls with 
+	Victims age 20-30.
+
+```{r, echo=FALSE,fig.height=3}
+ggplot(project_data)+geom_bar(aes(x=`Victim Sex`,fill = `Victim Sex`))+coord_flip()+scale_fill_hue(l=40)
+ggplot(project_data,aes(x = `Victim AgeGroup`,fill = `Victim AgeGroup`))+geom_bar()+scale_fill_hue(l=40)
+```
+
+***
+
+\clearpage
 
 ## Part 3 - Exploratory data analysis
 
-```{r full data,echo=FALSE, results='hide', include=TRUE,fig.show='show', fig.height= 2.5}
-#ggplot(project_data, aes(x = year, colour = project_data$`Victim Sex`)) + geom_density()
+### National Age Average
+
+```{r, echo=FALSE}
+paste0("Summary of age for entire dataset")
+summary(project_data$`Victim Age`)
+sd(project_data$`Victim Age`)
+```
+\
+
+* **Murders 1980-2014: N($\mu$ = 33.26, $\sigma$ $\approx$ 17.79)**
+* I would like to see the probability of a murder taking place on `Victim Sex` $\le$ 30
+* In order to do so I can calculate **Z = $\frac{x-\mu}{\sigma}$ Where $x$ $\le$ 30** = $-0.183249$
+
+```{r, echo=FALSE, results='hide',fig.height=3}
+(30-33.26)/17.79
+pnorm( -0.183249)
+normalPlot(bound = c(-Inf, -0.183249))
+```
+
+What's interesting here, $\approx$  $42.7\%$ of all the reported murders in our data set, of victims\newline
+whose age we can determine, occurs with the first 30 years of there life. Next I will\newline
+compare the average age of murdered women in our dataset, by region.
+
+
+```{r create new var full, echo=FALSE}
+#WEST
+project_data <- project_data %>% 
+  mutate(femW = ifelse(project_data$Region=="West" & project_data$`Victim Sex`=="Female", "yes", "no"))
+
+
+#MIDWEST
+project_data <- project_data %>% 
+  mutate(femMid = ifelse(project_data$Region=="Midwest" & project_data$`Victim Sex`=="Female", "yes", "no"))
+
+#NORTHEAST
+project_data <- project_data %>% 
+  mutate( femNE= ifelse(project_data$Region=="Northeast" & project_data$`Victim Sex`=="Female", "yes", "no"))
+
+#SOUTH
+project_data <- project_data %>% 
+  mutate( femS= ifelse(project_data$Region=="South" & project_data$`Victim Sex`=="Female", "yes", "no"))
+
+#PACIFIC
+project_data <- project_data %>% 
+  mutate( femP= ifelse(project_data$Region=="Pacific" & project_data$`Victim Sex`=="Female", "yes", "no"))
+```
+
+\clearpage
+
+### Regional Age Averages
+
+```{r, echo=FALSE}
+paste0("In order to compare variabilities I created vectors in our master data set using")
+paste0("project_data <- project_data %>% mutate(femW = ifelse(project_data$Region....")
+paste0("allowing for comparison of one regions variability with the remaining 3 combined")
+```
+
+	The boxplots below show that with respect to age, our data is right skewed, indicating 
+	murders occurred at a higher frequency within the first three decades of our victims lives.
+	This is supported with consistent medians, relatively close means and similar number of 
+	outliers shown. The only standouts would be the Pacific, which has slightly more scattered 
+	outliers, and the South which has the lowest percentage of murder victims below 30 ( 40% ).
+	Based on the data, I suspect age brackets hardly impact murders among women below 30.
+	
+
+**Western Murders 1980-2014: N($\mu$ = 32.64, $\sigma$ = 17.42)**\newline
+**Z = $\frac{x-\mu}{\sigma}$ Where $x$ $\le$ 30** = $-0.1515663$ making $\approx$ $44\%$ of murder victims years$\le$ **30**
+
+```{r boxplot west, out.width="50%",echo=FALSE,results='hide'}
+summary(west$`Victim Age`)
+sd(west$`Victim Age`)
+(30-32.64)/17.41812
+pnorm(-0.1515663)
+normalPlot(bound = c(-Inf,-0.1515663))
+ggplot(project_data, aes(y=`Victim Age`, x=femW))+geom_boxplot()+labs(title="Western Female gender vs. Remaining Regions",x="West & Female")
+```
+\
+**Midwestern Murders 1980-2014: N($\mu$ = 32.6, $\sigma$ $\approx$ 17.34)**\newline
+**Z = $\frac{x-\mu}{\sigma}$ Where $x$ $\le$ 30** = $-0.1499721$ making $\approx$ $44\%$ of murder victims years$\le$ **30**
+
+```{r boxplot midwest, out.width="50%",echo=FALSE,results='hide'}
+summary(midwest$`Victim Age`)
+sd(midwest$`Victim Age`)
+(30-32.6)/17.33656
+pnorm(-0.1499721)
+normalPlot(bound = c(-Inf,-0.1499721))
+ggplot(project_data, aes(y=`Victim Age`, x=femMid))+geom_boxplot()+labs(title="MidWestern Female gender vs. Remaining Regions",x="MidWest & Female")
+```
+
+\clearpage
+
+**Northeastern Murders 1980-2014: N($\mu$ = 32.99, $\sigma$ $\approx$ 17.56)**\newline
+**Z = $\frac{x-\mu}{\sigma}$ Where $x$ $\le$ 30** = $-0.1702733$ making $\approx$ $43\%$ of murder victims years$\le$ **30**
+
+```{r boxplot northeast, out.width="50%",echo=FALSE,results='hide'}
+summary(northeast$`Victim Age`)
+sd(northeast$`Victim Age`)
+(30-32.99)/17.56
+pnorm(-0.1702733)
+normalPlot(bound = c(-Inf,-0.1702733))
+ggplot(project_data, aes(y=`Victim Age`, x=femNE))+geom_boxplot()+labs(title="NorthEastern Female gender vs. Remaining Regions",x="NorthEast & Female")
+```
+
+**Southern Murders 1980-2014: N($\mu$ = 35, $\sigma$ $\approx$ 18.32)**\newline
+**Z = $\frac{x-\mu}{\sigma}$ Where $x$ $\le$ 30** = $-0.2728698$ making $\approx$ $40\%$ of murder victims years$\le$ **30**
+
+```{r boxplot south, out.width="50%",echo=FALSE,results='hide'}
+summary(south$`Victim Age`)
+sd(south$`Victim Age`)
+(30-35)/ 18.32376
+pnorm(-0.2728698)
+normalPlot(bound = c(-Inf,-0.2728698))
+ggplot(project_data, aes(y=`Victim Age`, x=femS))+geom_boxplot()+labs(title="Southern Female gender vs. Remaining Regions",x="Southern & Female")
+```
+
+**Pacific Murders 1980-2014: N($\mu$ = 33.81, $\sigma$ $\approx$ 17.12)**\newline
+**Z = $\frac{x-\mu}{\sigma}$ Where $x$ $\le$ 30** = $-0.1168525$ making $\approx$ $45\%$ of murder victims years$\le$ **30**
+
+```{r boxplot pacific, out.width="50%",echo=FALSE,results='hide'}
+summary(pacific$`Victim Age`)
+sd(pacific$`Victim Age`)
+(30-32)/17.11559
+pnorm(-0.1168525)
+normalPlot(bound = c(-Inf,-0.1168525))
+ggplot(project_data, aes(y=`Victim Age`, x=femP))+geom_boxplot()+labs(title="Pacific Female gender vs. Remaining Regions",x="Pacific & Female")
+
+```
+
+***
+
+\clearpage
+
+### Average Female Murder Count by Region
+
+	Next I created a dataframe, categorizing the annual murder count of women by region
+	for the years between 1980-2014. What I found appeared alarming at first. I seems the
+	South has an overwhelming higher total female murder count:
+\
+\
+\
+	
+\begin{tabular}{l  r  r  r  r  r  r}
+                & \multicolumn{5}{c}{\textit{Female Murder Count by Region}} \\
+\cline{2-6}
+                & West  & Midwest  & Northeast & South & Pacific & Total \\
+\hline
+Mean            & 890.2     & 768     & 623.65       & 1,786.25   & 25.37   & 818.6971 \\
+SD              & 160.84    & 163.9   & 149.09       & 241.81     & 7.23    & 591.7687 \\
+n               & 31,157    & 26,880  & 21,82        & 62,519     & 888     & 143,272 \\
+\hline
+\end{tabular}
+\newline
+\newline
+**Things to note regarding this data:**
+
+	(1) visually one can suspect the general size of the South region might attribute to
+	its numbers
+	(2) The South has had the steepest increase in $Murders_{women\ under\ 30 }$ in the 
+	early 90's
+	(3) The South has had the steepest decline in $Murders_{women\ under\ 30 }$ in the early
+	90's to 2014
+	(4) $Murders_{women\ under\ 30 }$ in the Pacific has been the most constant among the batch
+\
+
+
+
+```{r means_female_only, echo=FALSE, results='hide'}
+female_only<-data.frame(Year = project_data$Year,Region = project_data$Region, Sex = project_data$`Victim Sex`)
+female_only<-female_only[female_only$Sex=='Female',]
+female_only<-female_only%>%count(Sex,Region,Year)
+female_only%>%filter(Region=="West")%>%summarize(mean(n))
+female_only%>%filter(Region=="Midwest")%>%summarize(mean(n))
+female_only%>%filter(Region=="Northeast")%>%summarize(mean(n))
+female_only%>%filter(Region=="South")%>%summarize(mean(n))
+female_only%>%filter(Region=="Pacific")%>%summarize(mean(n))
+```
+
+```{r sd_female_only, echo=FALSE, results='hide'}
+female_only%>%filter(Region=="West")%>%summarize(sd(n))
+female_only%>%filter(Region=="Midwest")%>%summarize(sd(n))
+female_only%>%filter(Region=="Northeast")%>%summarize(sd(n))
+female_only%>%filter(Region=="South")%>%summarize(sd(n))
+female_only%>%filter(Region=="Pacific")%>%summarize(sd(n))
+```
+
+```{r sum_female_only, echo=FALSE, results='hide'}
+female_only%>%filter(Region=="West")%>%summarize(sum(n))
+female_only%>%filter(Region=="Midwest")%>%summarize(sum(n))
+female_only%>%filter(Region=="Northeast")%>%summarize(sum(n))
+female_only%>%filter(Region=="South")%>%summarize(sum(n))
+female_only%>%filter(Region=="Pacific")%>%summarize(sum(n))
+```
+
+```{r, echo=FALSE, results='hide'}
+mean(female_only$n)
+sd(female_only$n)
+sum(female_only$n)
+project_data %>% filter(`Victim Sex` == "Female" & `Victim Age`< 31) %>% count()
+```
+
+```{r, echo=FALSE, out.height="50%"}
+
+ggplot(data = female_only, aes(x = Year, y = n, color=Region, group = Region, )) +
+  geom_line() +
+	geom_point()+
+	ggtitle("Annual Female Murder Count by Region")+
+	ylab("Muder Count")
+```
+
+```{r echo=FALSE, warning=FALSE}
+paste0("Data Frame: female_only<-data.frame(Year = project_data$Year,R...")
+paste0( " [female_only$Sex!='Male',] ...count(Sex,Region,Year)  ")
 ```
 
 ## Part 4 - Inference
