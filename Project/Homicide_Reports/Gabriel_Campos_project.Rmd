@@ -31,16 +31,16 @@ library (readr)
 	Gaining insight on those who are the most vulnerable and impacted by murder is 
 	necessary to forge initiatives in assisting those victimized by its threat. Like many
 	approaches in troubleshooting or diagnosing an issue, understanding where to begin is
-	a key first step. In order to focus this analysis, we will focus specifically on murder
-	rates for 'women under 30' against the entire data set.
+	a key first step. In order to focus this analysis, we will look further into what 
+	attributes impact the murder counts in the United States based on the data set.
 	
 ### Overview
 
 	The goals for this project are to:
 
-* Think about the independent and dependent variables in correlation to murder rates including region, gender and age
-* Compare murder rates by region, race, gender and age based on the data set
-* Draw conclusions of the most at risk region for our specific population in the United States based on our findings
+* Think about the independent and dependent variables in correlation to murder counts including region, gender and age.
+* Compare murder rates by region, gender and age based on the data set
+* Draw conclusions of the factors impacting the counts and question if these factors are localized based on our findings.
 
 \
 
@@ -337,16 +337,6 @@ n               & 31,157    & 26,880  & 21,82        & 62,519     & 888     & 14
 \end{tabular}
 \newline
 \newline
-**Things to note regarding this data:**
-
-	(1) visually one can suspect the general size of the South region might attribute to
-	its numbers
-	(2) The South has had the steepest increase in $Murders_{women\ under\ 30 }$ in the 
-	early 90's
-	(3) The South has had the steepest decline in $Murders_{women\ under\ 30 }$ in the early
-	90's to 2014
-	(4) $Murders_{women\ under\ 30 }$ in the Pacific has been the most constant among the batch
-\
 
 
 
@@ -384,7 +374,7 @@ sum(female_only$n)
 project_data %>% filter(`Victim Sex` == "Female" & `Victim Age`< 31) %>% count()
 ```
 
-```{r, echo=FALSE, out.height="50%"}
+```{r, echo=FALSE, out.height="100%"}
 
 ggplot(data = female_only, aes(x = Year, y = n, color=Region, group = Region, )) +
   geom_line() +
@@ -397,11 +387,180 @@ ggplot(data = female_only, aes(x = Year, y = n, color=Region, group = Region, ))
 paste0("Data Frame: female_only<-data.frame(Year = project_data$Year,R...")
 paste0( " [female_only$Sex!='Male',] ...count(Sex,Region,Year)  ")
 ```
+\clearpage
 
 ## Part 4 - Inference
 
+	The data above shows similar behavior with respect to mean age of murder count.
+	It is also apparent that gender, impacts murder counts when comparing Males to
+	Females. Now we will consider the impact Regions have on murder counts of cases
+	of the same gender. I will infer based on age, by categorizing Females into 2
+	groups, those above 30 years of age and those below. The decision to split at 
+	30 years, comes from looking at the National average 33.56, and my largest group
+	set for age, the 20-30 bracket. The 2 regions I will use are the highest and 
+	lowest for my Annual "Female Murder Count by Region" line graph, the South and 
+	the Pacific.
+	
+
+### South Inference
+
+**Inference Conditions**
+
+* Independence - Murder counts are assumed independent with 53072 observations$\checkmark$
+* Success-failure Conditions - $Count_{under\ 30}$=1079 & $Count_{over\ 30}$=2212 $\therefore n \ge 30$ $\checkmark$
+
+**Hypothesis statement**\newline
+$H_0$ = $South_{30yrs\ OR\ less} = 0.\ No\ Difference\ in\ average\ below\ or\ above\ 30\ years\ for\ women$\newline
+$H_A$ = $South_{30yrs\ OR\ less} \ne 0.\ There\ is\ a\ difference$\newline
+
+
+```{r south inference female batch, echo=FALSE, results='hide'}
+
+south<-south[south$`Victim Sex`=='Female',]
+count(south)
+south<-south%>%count(`Victim Sex`,`Victim Age`,Region,Year)
+
+```
+
+
+```{r new var under30 south, echo=TRUE}
+#New Variable Created 'under30'
+south <- south %>% 
+  mutate(under30 = ifelse(south$`Victim Age` < 31, "yes", "no"))
+```
+
+```{r by-means south,include=FALSE, echo=FALSE, results='hide'}
+south %>%
+  group_by(under30) %>%
+  summarise(mean_n = mean(n, na.rm = TRUE))
+```
+
+```{r inf-weight-habit-ht-south-initial, tidy=FALSE, warning = FALSE,echo=FALSE}
+obs_diff_south <- south %>%
+  specify(n ~ under30) %>%
+  calculate(stat = "diff in means", order = c("yes", "no"))
+```
+
+Observation stat of 8.593917 generated & `hypothesize` function used to set null hypothesis as a test for independence. We have 0 null permutations.
+
+```{r inf-weight-habit-ht-null-south, tidy=FALSE, warning = FALSE, echo=FALSE}
+null_dist_south <- south %>%
+  specify(n ~ under30) %>%
+  hypothesize(null = "independence") %>%
+  generate(reps = 1000, type = "permute") %>%
+  calculate(stat = "diff in means", order = c("yes", "no"))
+```
+
+```{r, include=FALSE}
+sum(null_dist_south$stat > 8.59)
+```
+
+```{r south histo,warning=FALSE, echo=FALSE, message=FALSE, out.width="50%"}
+ggplot(data = null_dist_south, aes(x = stat)) +
+  geom_histogram()
+
+ggplot(south, aes(x = n, colour = under30)) + geom_density()
+```
+
+```{r inf-weight-habit-ht-pvalue, echo=FALSE,warning=FALSE}
+null_dist_south %>%
+  get_p_value(obs_stat = obs_diff_south, direction = "two_sided")
+```
+
+\clearpage
+
+```{r inference function,echo=TRUE, results='markup',fig.height=3}
+inference(y = south$n, x = south$under30,est = "mean", type = "ci", method = "theoretical")
+```
+
+\clearpage
+
+### Pacific Inference
+
+**Inference Conditions**
+
+* Independence - Murder counts are assumed independent with 888 observations$\checkmark$
+* Success-failure Conditions - $Count_{under\ 30}$=308 & $Count_{over\ 30}$=387 $\therefore n \ge 30$ $\checkmark$
+
+**Hypothesis statement**\newline
+$H_0$ = $Pacific_{30yrs\ OR\ less} = 0.\ No\ Difference\ in\ average\ below\ or\ above\ 30\ years\ for\ women$\newline
+$H_A$ = $Pacific_{30yrs\ OR\ less} \ne 0.\ There\ is\ a\ difference$\newline
+
+
+```{r pacific inference female batch, echo=FALSE, results='hide'}
+
+pacific<-pacific[pacific$`Victim Sex`=='Female',]
+count(pacific)
+pacific<-pacific%>%count(`Victim Sex`,`Victim Age`,Region,Year)
+
+```
+
+
+```{r new var under30 Pacific, echo=TRUE}
+#New Variable Created 'under30'
+pacific <- pacific %>% 
+  mutate(under30 = ifelse(pacific$`Victim Age` < 31, "yes", "no"))
+```
+
+```{r by-means Pacific,include=FALSE, echo=FALSE, results='hide',warning=FALSE}
+pacific %>%
+  group_by(under30) %>%
+  summarise(mean_n = mean(n, na.rm = TRUE))
+```
+
+```{r inf-weight-habit-ht-initial, tidy=FALSE, warning = FALSE,echo=FALSE}
+obs_diff_pacific <- pacific %>%
+  specify(n ~ under30) %>%
+  calculate(stat = "diff in means", order = c("yes", "no"))
+```
+
+Observation stat of 0.1601648 generated & `hypothesize` function used to set null hypothesis as a test for independence. We have 0 null permutations.
+
+```{r inf-weight-habit-ht-null, tidy=FALSE, warning = FALSE, echo=FALSE}
+null_dist_pacific <- pacific %>%
+  specify(n ~ under30) %>%
+  hypothesize(null = "independence") %>%
+  generate(reps = 1000, type = "permute") %>%
+  calculate(stat = "diff in means", order = c("yes", "no"))
+```
+
+```{r, include=FALSE}
+sum(null_dist_pacific$stat > 0.1601648)
+```
+
+```{r Pacific histo,warning=FALSE, echo=FALSE, message=FALSE, out.width="50%"}
+ggplot(data = null_dist_pacific, aes(x = stat)) +
+  geom_histogram()
+
+ggplot(pacific, aes(x = n, colour = under30)) + geom_density()
+```
+
+```{r inf-weight-habit-ht-pvalue-pacific, echo=FALSE,warning=FALSE}
+null_dist_pacific %>%
+  get_p_value(obs_stat = obs_diff_pacific, direction = "two_sided")
+```
+
+\clearpage
+
+```{r inference function pacific,echo=TRUE, results='markup',fig.height=3}
+inference(y = pacific$n, x = pacific$under30,est = "mean", type = "ci", method = "theoretical")
+```
+
+
 
 ## Part 5 - Conclusion
+
+	My conclusion is based on the following facts:
+	* Mean age on a national and a regional level hardly differs
+	* Region does not impact murder count of a gender by age
+	* Gender does impact murder count, but only when referencing male vs. female
+
+Noting the higher murder count for the South vs. the Pacific, considering the Pacific is easily much smaller\newline
+being composed of only 2 states, and the fact that it both follow national trends indicating peak numbers\newline
+occur for victims 20-30, I would saw the difference is most likely because of population size. If I were to\newline
+do a comparison of population of these regions during these years, I'd imagine the murder counts would be\newline
+comparable. Regardless the data does not highlight any specific region in my opinion, but does imply age is\newline
+is the biggest factor among those mentions, impacting murder count.\newline
 
 
 ## References:
@@ -411,6 +570,4 @@ paste0( " [female_only$Sex!='Male',] ...count(Sex,Region,Year)  ")
 *Project
 https://www.kaggle.com/murderaccountability/homicide-reports?select=database.csv*
 
-## Appendix (optional):
 
-Remove this section if you don't have an appendix
