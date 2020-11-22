@@ -550,17 +550,17 @@ inference(y = pacific$n, x = pacific$under30,est = "mean", type = "ci", method =
 
 ## Part 5 - Conclusion
 
-	My conclusion is based on the following facts:
-	* Mean age on a national and a regional level hardly differs
-	* Region does not impact murder count of a gender by age
-	* Gender does impact murder count, but only when referencing male vs. female
+My conclusion is based on the following facts:
+	
+* Mean age on a national and a regional level hardly differs
+* Region does not impact murder count of a gender by age
+* Gender does impact murder count, but only when referencing male vs. female
 
-Noting the higher murder count for the South vs. the Pacific, considering the Pacific is easily much smaller\newline
-being composed of only 2 states, and the fact that it both follow national trends indicating peak numbers\newline
-occur for victims 20-30, I would saw the difference is most likely because of population size. If I were to\newline
-do a comparison of population of these regions during these years, I'd imagine the murder counts would be\newline
-comparable. Regardless the data does not highlight any specific region in my opinion, but does imply age is\newline
-is the biggest factor among those mentions, impacting murder count.\newline
+Noting the higher murder count for the South vs. the Pacific, considering the Pacific is easily much smaller
+being composed of only 2 states, and the fact that both follow national trends indicating peak numbers
+occur for victims 20-30, I would say the difference is most likely because of population size. If I were to
+do a comparison of population of these regions during these years, I'd imagine the murder counts would be
+comparable. Therefore, my limitation with this data is not having the population size for each states, per year, between 1980-2014. Regardless the data does not highlight any specific region as having an abnormal murder count in my opinion. I can support that age is the biggest factor among those mentions.
 
 
 ## References:
