@@ -74,15 +74,26 @@ project_data$Region<-
 		   	project_data$State=="Wyoming","West",
 		   ifelse(project_data$State=="Illinois"|
 		   	   	project_data$State == "Indiana"| project_data$State == "Iowa"| project_data$State == "Kansas"|
-		   	   	project_data$State == "Michigan"| project_data$State == "Minnesota"| project_data$State ==
-		   	   	"Missouri"| project_data$State == "Nebraska"| project_data$State == "North Dakota"|
-		   	   	project_data$State == "Ohio"| project_data$State == "South Dakota"| project_data$State ==
-		   	   	"Wisconsin","Midwest",
-		   	   ifelse(project_data$State == "Connecticut"| project_data$State == "Delaware"| project_data$State
-		   	   	   =="Maine"| project_data$State =="Massachusetts"| project_data$State =="New Hampshire"
-		   	   	   |project_data$State =="New Jersey"| project_data$State == "New York"| project_data$State
-		   	   	   =="Pennsylvania"| project_data$State == "Rhode Island"| project_data$State=="Vermont","Northeast",
-		   	   	   ifelse(project_data$State == "Alaska"| project_data$State == "Hawaii","Pacific","South")
+		   	   	project_data$State == "Michigan"| project_data$State == "Minnesota"|
+		   	   	project_data$State == "Missouri"| project_data$State == "Nebraska"|
+		   	   	project_data$State == "North Dakota"| project_data$State == "Ohio"|
+		   	   	project_data$State == "South Dakota"| project_data$State == "Wisconsin","Midwest",
+		   	   ifelse(project_data$State == "Connecticut"|
+		   	   	    project_data$State =="Maine"|project_data$State =="Massachusetts"|
+		   	   	   	project_data$State =="New Hampshire"| project_data$State =="New Jersey"|
+		   	   	   	project_data$State == "New York"| project_data$State =="Pennsylvania"|
+		   	   	   	project_data$State == "Rhodes Island"| project_data$State=="Vermont","Northeast",
+		   	   	   ifelse(project_data$State == "Alabama"| project_data$State == "Arkansas"|
+		   	   	   	   	project_data$State == "Delaware"| project_data$State =="District of Columbia"|
+		   	   	   	   	project_data$State == "Florida" | project_data$State == "Georgia"|
+		   	   	   	   	project_data$State == "Kentucky"| project_data$State ==	"Louisiana"|
+		   	   	   	   	project_data$State == "Maryland"| project_data$State == "Mississippi"|
+		   	   	   	   	project_data$State == "North Carolina"| project_data$State == "Oklahoma"|
+		   	   	   	   	project_data$State == "South Carolina"| project_data$State == "Tennessee"|
+		   	   	   	   	project_data$State == "Texas"| project_data$State == "Virginia"|
+		   	   	   	   	project_data$State == "West Virginia","South",
+		   	   	   	   ifelse(project_data$State =="Alaska"| project_data$State == "Hawaii", "Pacific",
+		   	   	   	   	   "Other"))
 		   	   	   )
 		   	   )
 		   )
@@ -90,41 +101,69 @@ project_data$Region<-
 project_data$`Victim AgeGroup`<- cut(project_data$`Victim Age`,
 									 breaks=c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100),
 									 right = FALSE)
-
+count<-project_data$`Victim Age`
+project_data<-project_data[!(project_data$`Victim Age`==998) & project_data$`Victim Sex`!='Unknown',]
 ```
 
 
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
-west <- project_data %>%
-  filter(State == "Arizona"| State == "California"| State =="Colorado"
-  	   | State =="Idaho"| State =="Montana"| State =="Nevada"
-  	   | State == "New Mexico"| State =="Oregon" | State == "Utah"
-  	   | State =="Washington"| State =="Wyoming")
-midwest <- project_data %>%
-  filter(State == "Illinois"| State == "Indiana"| State =="Iowa"
-  	   | State =="Kansas"| State =="Michigan"| State =="Minnesota"
-  	   | State == "Missouri"| State =="Nebraska"| State == "North Dakota"
-  	   | State =="Ohio"| State =="South Dakota"| State =="Wisconsin")
-northeast <- project_data %>%
-  filter(State == "Connecticut"| State == "Delaware"| State =="Maine"
-  	   | State =="Massachusetts"| State =="New Hampshire"
-  	   | State =="New Jersey"| State == "New York"| State =="Pennsylvania"
-  	   | State == "Rhode Island"| State =="Vermont")
-south <- project_data %>%
-  filter(State == "Alabama"| State == "Arkansas"| State =="Florida"
-  	   | State =="Georgia"| State =="Kentucky"| State =="Louisiana"
-  	   | State == "Mississippi"| State =="North Carolina"| State == "Oklahoma"
-  	   | State =="South Carolina"| State =="South Carolina"| State =="Tennessee"
-  	   | State =="Texas"| State =="Virgina"| State =="West Virgina")
-pacific<- project_data %>%
-  filter(State == "Alaska"| State == "Hawaii")
-
+#west <- project_data %>%
+ # filter(State == "Arizona"| State == "California"| State =="Colorado"
+  #	   | State =="Idaho"| State =="Montana"| State =="Nevada"
+  #	   | State == "New Mexico"| State =="Oregon" | State == "Utah"
+  #	   | State =="Washington"| State =="Wyoming")
+west<-project_data[project_data$Region=='West',]
 paste0("Loading Data: database.csv ")
 paste0("Subset Data: Region <- project_data %>% filter() ")
 paste0("Vector Region: project_data$Region<-ifelse(State,Region1,ifelse(State,Region2,")
 paste0("Vector AgeGroup: project_data$`Victim AgeGroup`<- cut(project_data$`Victim Age`,... ")
 ```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+#midwest <- project_data %>%
+#  filter(State == "Illinois"| State == "Indiana"| State =="Iowa"
+#  	   | State =="Kansas"| State =="Michigan"| State =="Minnesota"
+#  	   | State == "Missouri"| State =="Nebraska"| State == "North Dakota"
+#  	   | State =="Ohio"| State =="South Dakota"| State =="Wisconsin")
+midwest<-project_data[project_data$Region=='Midwest',]
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+#northeast <- project_data %>%
+#  filter(State == "Connecticut"| State == "Delaware"| State =="Maine"
+#  	   | State =="Massachusetts"| State =="New Hampshire"
+#  	   | State =="New Jersey"| State == "New York"| State =="Pennsylvania"
+#  	   | State == "Rhodes Island"| State =="Vermont")
+northeast<-project_data[project_data$Region=='Northeast',]
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+#south <- project_data %>%
+#  filter(State == "Alabama"| State == "Arkansas"| State == "Delaware"
+#  	   | State =="District of Columbia" | State =="Florida"
+#	   | State =="Georgia"| State =="Kentucky"
+#  	   | State =="Louisiana"| State == "Maryland"|State == "Mississippi"
+#  	   | State =="North Carolina"| State == "Oklahoma"
+#  	   | State =="South Carolina"| State =="Tennessee"
+#  	   | State =="Texas"| State =="Virgina"| State =="West Virgina")
+south<-project_data[project_data$Region=='South',]
+#south %>% filter(`Victim Sex` == "Female") %>% glimpse()
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+#pacific<- project_data %>%
+#  filter(State == "Alaska"| State == "Hawaii")
+pacific<-project_data[project_data$Region=='Pacific',]
+```
+
+
+
+
+
+
+
+
 
 ![US regions based on [census.gov](https://www2.census.gov/geo/pdfs/maps-data/maps/reference/us_regdiv.pdf) ](regions.PNG){height=40%}
 
@@ -155,9 +194,9 @@ $Note:Age\ 998\ was\ assigned\ to\ victims\ who's\ age\ could\ not\ be\ determin
 $To\ avoid\ the\ impact\ it\ will\ have\ on\ our\ results\ I\ will\ remove\ it\ from\ our\ existing\ dataframes$
 
 ```{r, echo=FALSE}
-count<-project_data$`Victim Age`
+
 table(count)
-project_data<-project_data[!(project_data$`Victim Age`==998) & project_data$`Victim Sex`!='Unknown',]
+
 west<-west[!(west$`Victim Age`==998) & west$`Victim Sex`!='Unknown',]
 midwest<-midwest[!(midwest$`Victim Age`==998) & midwest$`Victim Sex`!='Unknown',]
 northeast<-northeast[!(northeast$`Victim Age`==998) & northeast$`Victim Sex`!='Unknown',]
@@ -193,17 +232,17 @@ sd(project_data$`Victim Age`)
 ```
 \
 
-* **Murders 1980-2014: N($\mu$ = 33.26, $\sigma$ $\approx$ 17.79)**
-* I would like to see the probability of a murder taking place on `Victim Sex` $\le$ 30
-* In order to do so I can calculate **Z = $\frac{x-\mu}{\sigma}$ Where $x$ $\le$ 30** = $-0.183249$
+* **Murders 1980-2014: N($\mu$ = 33.56, $\sigma$ $\approx$ 17.79)**
+* I would like to see the probability of a murder taking place on `Victim Age` $\le$ 30
+* In order to do so I can calculate **Z = $\frac{x-\mu}{\sigma}$ Where $x$ $\le$ 30** = $-0.2001124$
 
 ```{r, echo=FALSE, results='hide',fig.height=3}
-(30-33.26)/17.79
-pnorm( -0.183249)
-normalPlot(bound = c(-Inf, -0.183249))
+(30-33.56)/17.79
+pnorm( -0.2001124)
+normalPlot(bound = c(-Inf, -0.2001124))
 ```
 
-What's interesting here, $\approx$  $42.7\%$ of all the reported murders in our data set, of victims\newline
+What's interesting here, $\approx$  $42.1\%$ of all the reported murders in our data set, of victims\newline
 whose age we can determine, occurs with the first 30 years of there life. Next I will\newline
 compare the average age of murdered women in our dataset, by region.
 
@@ -255,7 +294,7 @@ paste0("allowing for comparison of one regions variability with the remaining 3 
 ```{r boxplot west, out.width="50%",echo=FALSE,results='hide'}
 summary(west$`Victim Age`)
 sd(west$`Victim Age`)
-(30-32.64)/17.41812
+(30-32.64)/17.41812 
 pnorm(-0.1515663)
 normalPlot(bound = c(-Inf,-0.1515663))
 ggplot(project_data, aes(y=`Victim Age`, x=femW))+geom_boxplot()+labs(title="Western Female gender vs. Remaining Regions",x="West & Female")
@@ -328,11 +367,11 @@ ggplot(project_data, aes(y=`Victim Age`, x=femP))+geom_boxplot()+labs(title="Pac
 \begin{tabular}{l  r  r  r  r  r  r}
                 & \multicolumn{5}{c}{\textit{Female Murder Count by Region}} \\
 \cline{2-6}
-                & West  & Midwest  & Northeast & South & Pacific & Total \\
+                & West  & Midwest  & Northeast & South & Pacific & Total/Ave \\
 \hline
-Mean            & 890.2     & 768     & 623.65       & 1,786.25   & 25.37   & 818.6971 \\
-SD              & 160.84    & 163.9   & 149.09       & 241.81     & 7.23    & 591.7687 \\
-n               & 31,157    & 26,880  & 21,82        & 62,519     & 888     & 143,272 \\
+Mean            & 890.2     & 768     & 623.9714     & 1,785.943  & 25.37   & 818.69 \\
+SD              & 160.84    & 163.9   & 150.17       & 240.88     & 7.23    & 144.6 \\
+n               & 31,157    & 26,880  & 21,839       & 62,508     & 888     & 143,272 \\
 \hline
 \end{tabular}
 \newline
@@ -342,14 +381,35 @@ n               & 31,157    & 26,880  & 21,82        & 62,519     & 888     & 14
 
 ```{r means_female_only, echo=FALSE, results='hide'}
 female_only<-data.frame(Year = project_data$Year,Region = project_data$Region, Sex = project_data$`Victim Sex`)
+glimpse(female_only)
+
+```
+
+```{r, echo=FALSE, results='hide'}
 female_only<-female_only[female_only$Sex=='Female',]
+glimpse(female_only)
+
+```
+
+
+```{r, echo=FALSE, results='hide'}
 female_only<-female_only%>%count(Sex,Region,Year)
+glimpse(female_only)
+```
+
+
+
+
+```{r,echo=FALSE, results='hide'}
 female_only%>%filter(Region=="West")%>%summarize(mean(n))
 female_only%>%filter(Region=="Midwest")%>%summarize(mean(n))
 female_only%>%filter(Region=="Northeast")%>%summarize(mean(n))
 female_only%>%filter(Region=="South")%>%summarize(mean(n))
 female_only%>%filter(Region=="Pacific")%>%summarize(mean(n))
 ```
+
+
+
 
 ```{r sd_female_only, echo=FALSE, results='hide'}
 female_only%>%filter(Region=="West")%>%summarize(sd(n))
@@ -361,11 +421,28 @@ female_only%>%filter(Region=="Pacific")%>%summarize(sd(n))
 
 ```{r sum_female_only, echo=FALSE, results='hide'}
 female_only%>%filter(Region=="West")%>%summarize(sum(n))
+
+```
+
+```{r, echo=FALSE, results='hide'}
 female_only%>%filter(Region=="Midwest")%>%summarize(sum(n))
+
+```
+
+```{r, echo=FALSE, results='hide'}
 female_only%>%filter(Region=="Northeast")%>%summarize(sum(n))
+
+```
+
+```{r, echo=FALSE, results='hide'}
 female_only%>%filter(Region=="South")%>%summarize(sum(n))
+
+```
+
+```{r}
 female_only%>%filter(Region=="Pacific")%>%summarize(sum(n))
 ```
+
 
 ```{r, echo=FALSE, results='hide'}
 mean(female_only$n)
@@ -406,18 +483,19 @@ paste0( " [female_only$Sex!='Male',] ...count(Sex,Region,Year)  ")
 
 **Inference Conditions**
 
-* Independence - Murder counts are assumed independent with 53072 observations$\checkmark$
-* Success-failure Conditions - $Count_{under\ 30}$=1079 & $Count_{over\ 30}$=2212 $\therefore n \ge 30$ $\checkmark$
+* Independence - Murder counts are assumed independent with 62,508 observations$\checkmark$
+* Success-failure Conditions - $Count_{under\ 30}$=27,982 & $Count_{over\ 30}$=34,526 $\therefore n \ge 30$ $\checkmark$
 
 **Hypothesis statement**\newline
 $H_0$ = $South_{30yrs\ OR\ less} = 0.\ No\ Difference\ in\ average\ below\ or\ above\ 30\ years\ for\ women$\newline
 $H_A$ = $South_{30yrs\ OR\ less} \ne 0.\ There\ is\ a\ difference$\newline
 
 
-```{r south inference female batch, echo=FALSE, results='hide'}
+```{r south inference female batch, echo=TRUE, results='hide'}
 
 south<-south[south$`Victim Sex`=='Female',]
-count(south)
+glimpse(south)
+#count(south)
 south<-south%>%count(`Victim Sex`,`Victim Age`,Region,Year)
 
 ```
@@ -429,21 +507,27 @@ south <- south %>%
   mutate(under30 = ifelse(south$`Victim Age` < 31, "yes", "no"))
 ```
 
+```{r, echo=FALSE,results='hide'}
+south%>%filter(under30=="yes")%>%summarize(sum(n))
+south%>%filter(under30=="no")%>%summarize(sum(n))
+```
+
+
 ```{r by-means south,include=FALSE, echo=FALSE, results='hide'}
 south %>%
   group_by(under30) %>%
   summarise(mean_n = mean(n, na.rm = TRUE))
 ```
 
-```{r inf-weight-habit-ht-south-initial, tidy=FALSE, warning = FALSE,echo=FALSE}
+```{r inf-weight-habit-ht-south-initial, tidy=FALSE, warning = FALSE,echo=TRUE}
 obs_diff_south <- south %>%
   specify(n ~ under30) %>%
   calculate(stat = "diff in means", order = c("yes", "no"))
 ```
 
-Observation stat of 8.593917 generated & `hypothesize` function used to set null hypothesis as a test for independence. We have 0 null permutations.
+Observation stat of 10.39966 generated & `hypothesize` function used to set null hypothesis as a test for independence. We have 0 null permutations.
 
-```{r inf-weight-habit-ht-null-south, tidy=FALSE, warning = FALSE, echo=FALSE}
+```{r inf-weight-habit-ht-null-south, tidy=FALSE, warning = FALSE, echo=TRUE}
 null_dist_south <- south %>%
   specify(n ~ under30) %>%
   hypothesize(null = "independence") %>%
@@ -452,7 +536,7 @@ null_dist_south <- south %>%
 ```
 
 ```{r, include=FALSE}
-sum(null_dist_south$stat > 8.59)
+sum(null_dist_south$stat > 10.39966)
 ```
 
 ```{r south histo,warning=FALSE, echo=FALSE, message=FALSE, out.width="50%"}
@@ -480,7 +564,7 @@ inference(y = south$n, x = south$under30,est = "mean", type = "ci", method = "th
 **Inference Conditions**
 
 * Independence - Murder counts are assumed independent with 888 observations$\checkmark$
-* Success-failure Conditions - $Count_{under\ 30}$=308 & $Count_{over\ 30}$=387 $\therefore n \ge 30$ $\checkmark$
+* Success-failure Conditions - $Count_{under\ 30}$=421 & $Count_{over\ 30}$=467 $\therefore n \ge 30$ $\checkmark$
 
 **Hypothesis statement**\newline
 $H_0$ = $Pacific_{30yrs\ OR\ less} = 0.\ No\ Difference\ in\ average\ below\ or\ above\ 30\ years\ for\ women$\newline
@@ -501,6 +585,13 @@ pacific<-pacific%>%count(`Victim Sex`,`Victim Age`,Region,Year)
 pacific <- pacific %>% 
   mutate(under30 = ifelse(pacific$`Victim Age` < 31, "yes", "no"))
 ```
+
+
+```{r, echo=FALSE,results='hide'}
+pacific%>%filter(under30=="yes")%>%summarize(sum(n))
+pacific%>%filter(under30=="no")%>%summarize(sum(n))
+```
+
 
 ```{r by-means Pacific,include=FALSE, echo=FALSE, results='hide',warning=FALSE}
 pacific %>%
